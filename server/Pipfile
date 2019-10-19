@@ -10,7 +10,8 @@ autopep8 = "*"
 [packages]
 flask = "*"
 flask-restplus = "*"
-flask-jwt = "*"
+python-jose-cryptodome = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
