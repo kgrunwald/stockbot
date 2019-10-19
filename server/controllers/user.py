@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restplus import Resource, Namespace, fields
-from .auth import authorizations
+from .auth import authorizations, requires_auth
 
 api = Namespace('users', description='User related operations',
                 authorizations=authorizations)
@@ -21,3 +21,11 @@ class Index(Resource):
             'name': 'Kyle',
             'id': '12345'
         }
+
+
+@api.route("/private")
+class Index2(Resource):
+    @requires_auth
+    def get(self):
+        response = "Hello from a private endpoint! You need to be authenticated to see this."
+        return {"message": response}
