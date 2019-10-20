@@ -1,17 +1,22 @@
 from flask import request, jsonify, _request_ctx_stack
+from flask_restplus import Resource
 from functools import wraps
 from jose import jwt
 from werkzeug.exceptions import Unauthorized, Forbidden
+from .api import api
 import json
 import requests
 
 authorizations = {
-    'apikey': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'X-API-Key'
+    'oauth2': {
+        'type': 'oauth2',
+        'flow': 'implicit',
+        'authorizationUrl': 'https://kgrunwald.auth0.com/authorize?audience=https://api.stockbot.com',
+        'clientId': 'qVIw4i0S0Fz8vbW7SFWCwEE0sBRVuX1J'
     }
 }
+
+api.authorizations = authorizations
 
 AUTH0_DOMAIN = 'kgrunwald.auth0.com'
 API_AUDIENCE = 'https://api.stockbot.com'
@@ -113,3 +118,8 @@ def requires_scope(required_scope):
             raise JWTForbidden("invalid_header", "Unable to find appropriate scope")
         return decorated
     return scope_validator
+
+
+@api.doc(security='oauth2')
+class ProtectedResource(Resource):
+    method_decorators = [requires_auth]

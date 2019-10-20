@@ -1,9 +1,8 @@
 from flask import Blueprint
 from flask_restplus import Resource, Namespace, fields
-from .auth import authorizations, requires_auth, requires_scope
+from .auth import ProtectedResource, authorizations, requires_auth, requires_scope
 
-api = Namespace('users', description='User related operations',
-                authorizations=authorizations)
+api = Namespace('users', description='User related operations')
 
 user = api.model('User', {
     'name': fields.String,
@@ -12,9 +11,8 @@ user = api.model('User', {
 
 
 @api.route('/')
-@api.doc(security='apikey')
 @api.response(404, 'Not Found')
-class Index(Resource):
+class Index(ProtectedResource):
     @api.marshal_with(user)
     def get(self):
         return {
@@ -24,8 +22,7 @@ class Index(Resource):
 
 
 @api.route("/private")
-class Index2(Resource):
-    @requires_auth
+class Index2(ProtectedResource):
     def get(self):
         response = "Hello from a private endpoint! You need to be authenticated to see this."
         return {"message": response}
