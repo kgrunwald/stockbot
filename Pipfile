@@ -9,13 +9,14 @@ autopep8 = "*"
 
 [packages]
 flask = "*"
-flask-restplus = "*"
 python-jose-cryptodome = "*"
 requests = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 gunicorn = "*"
 python-dotenv = "*"
+flask-injector = "*"
+flask-restplus = "*"
 
 [requires]
 python_version = "3.7.4"
