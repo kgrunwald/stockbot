@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restplus import Resource, Namespace, fields
-from .auth import authorizations, requires_auth
+from .auth import authorizations, requires_auth, requires_scope
 
 api = Namespace('users', description='User related operations',
                 authorizations=authorizations)

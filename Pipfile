@@ -12,6 +12,10 @@ flask = "*"
 flask-restplus = "*"
 python-jose-cryptodome = "*"
 requests = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+gunicorn = "*"
+python-dotenv = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.7.4"
