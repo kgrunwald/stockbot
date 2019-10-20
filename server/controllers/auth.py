@@ -11,8 +11,7 @@ authorizations = {
     'oauth2': {
         'type': 'oauth2',
         'flow': 'implicit',
-        'authorizationUrl': 'https://kgrunwald.auth0.com/authorize?audience=https://api.stockbot.com',
-        'clientId': 'qVIw4i0S0Fz8vbW7SFWCwEE0sBRVuX1J'
+        'authorizationUrl': 'https://kgrunwald.auth0.com/authorize?audience=https://api.stockbot.com'
     }
 }
 
