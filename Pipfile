@@ -17,7 +17,6 @@ gunicorn = "*"
 python-dotenv = "*"
 flask-injector = "*"
 flask-restplus = "*"
-install = "*"
 pylint-flask = "*"
 
 [requires]
