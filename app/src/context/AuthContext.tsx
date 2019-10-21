@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as authClient from "../clients/AuthClient";
 
 const AuthContext = React.createContext({
@@ -8,7 +8,13 @@ const AuthContext = React.createContext({
 });
 
 const AuthProvider = props => {
+
   const [token, setToken] = useState(undefined);
+
+  useEffect(() => {
+    authClient.getToken().then(() => setToken(token))
+  })
+
   const login = async () => {
     const token = await authClient.login();
     setToken(token)
@@ -17,7 +23,7 @@ const AuthProvider = props => {
     authClient.logout();
     setToken(undefined)
   }
-  authClient.getToken(setToken);
+  
   return <AuthContext.Provider value={{ token, login, logout }} {...props} />;
 };
 const useAuth = () => {

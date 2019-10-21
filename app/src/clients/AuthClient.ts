@@ -44,9 +44,8 @@ const logout = async () => {
   await AsyncStorage.removeItem(localStorageKey)
 }
 
-const getToken = async (setToken) => {
-  const token = await AsyncStorage.getItem(localStorageKey)
-  await setToken(token)
+const getToken = async () => {
+  return await AsyncStorage.getItem(localStorageKey)
 }
 
 export {login, logout, getToken}
