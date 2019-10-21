@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Api
 from flask_injector import inject
-from .auth import ProtectedResource
+from .auth import ProtectedResource, AuthUtils, requires_scope
 from ..service.user_service import UserService
 from ..models import User, modelize
 
@@ -11,10 +11,12 @@ user_model = modelize(User, api)
 @api.route('/')
 class UsersResource(ProtectedResource):
     @inject
-    def __init__(self, api: Api, svc: UserService):
+    def __init__(self, api: Api, svc: UserService, utils: AuthUtils):
         super().__init__(api)
         self.svc = svc
+        self.utils = utils
 
+    @requires_scope(api, 'read:users')
     @api.marshal_list_with(user_model)
     def get(self):
         return self.svc.get_all()
@@ -23,7 +25,8 @@ class UsersResource(ProtectedResource):
     @api.marshal_with(user_model, code=201, description='User created')
     @api.response(400, 'User with the provided credentials already exists')
     def post(self):
-        return self.svc.create(api.payload), 201
+        userinfo = self.utils.current_jwt()
+        return self.svc.create(userinfo['sub'], api.payload), 201
 
 
 @api.route('/<int:id>')

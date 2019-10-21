@@ -1,25 +1,16 @@
-from .db import db
 from typing import Dict
-
-
-class FieldDef:
-    def __init__(self, description, required=False):
-        self.description = description
-        self.required = required
+from .db import db, Column
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    uid = db.Column(db.String(80), unique=True, nullable=False)
+    id = Column(db.Integer, primary_key=True, description="Unique ID for the user in the DB")
+    username = Column(db.String(80), unique=True, nullable=False,
+                      description="Username or email address for the user", required=True)
+    uid = Column(db.String(80), unique=True, nullable=False,
+                 description="UID attribute of the JWT provided by Auth0", required=True)
+    account_id = Column(db.Integer, db.ForeignKey('account.id'), nullable=True,
+                        description="Account ID this user has access to")
+    account = db.relationship('Account', backref=db.backref('users', lazy=True))
 
     def __repr__(self):
         return '<User %r %r>' % self.username, self.uid
-
-    @classmethod
-    def field_defs(self) -> Dict[str, FieldDef]:
-        return {
-            'id': FieldDef("Unique ID for the user in the database", False),
-            'username': FieldDef("The user's email address or username", True),
-            'uid': FieldDef('The uid for this user from the Auth0 SSO system', True)
-        }

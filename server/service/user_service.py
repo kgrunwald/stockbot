@@ -4,10 +4,10 @@ from werkzeug.exceptions import BadRequest
 
 
 class UserService:
-    def create(self, data):
+    def create(self, user_id, data):
         user = User()
         user.username = data['username']
-        user.uid = data['uid']
+        user.uid = user_id
 
         try:
             db.session.add(user)
@@ -21,3 +21,6 @@ class UserService:
 
     def get(self, id):
         return User.query.get_or_404(id)
+
+    def get_by_uid(self, uid):
+        return User.query.filter_by(uid=uid).first_or_404()
