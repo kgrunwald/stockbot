@@ -1,31 +1,43 @@
-from flask import Blueprint
-from flask_restplus import Resource, Namespace, fields
-from .auth import authorizations, requires_auth, requires_scope
+from flask_restplus import Namespace, Api
+from flask_injector import inject
+from .auth import ProtectedResource, AuthUtils, requires_scope
+from ..service.user_service import UserService
+from ..models import User, modelize
 
-api = Namespace('users', description='User related operations',
-                authorizations=authorizations)
-
-user = api.model('User', {
-    'name': fields.String,
-    'id': fields.String
-})
+api = Namespace('users', description='User related operations')
+user_model = modelize(User, api)
 
 
 @api.route('/')
-@api.doc(security='apikey')
-@api.response(404, 'Not Found')
-class Index(Resource):
-    @api.marshal_with(user)
+class UsersResource(ProtectedResource):
+    @inject
+    def __init__(self, api: Api, svc: UserService, utils: AuthUtils):
+        super().__init__(api)
+        self.svc = svc
+        self.utils = utils
+
+    @requires_scope(api, 'read:users')
+    @api.marshal_list_with(user_model)
     def get(self):
-        return {
-            'name': 'Kyle',
-            'id': '12345'
-        }
+        return self.svc.get_all()
+
+    @api.expect(user_model)
+    @api.marshal_with(user_model, code=201, description='User created')
+    @api.response(400, 'User with the provided credentials already exists')
+    def post(self):
+        userinfo = self.utils.current_jwt()
+        return self.svc.create(userinfo['sub'], api.payload), 201
 
 
-@api.route("/private")
-class Index2(Resource):
-    @requires_auth
-    def get(self):
-        response = "Hello from a private endpoint! You need to be authenticated to see this."
-        return {"message": response}
+@api.route('/<int:id>')
+@api.response(404, 'User with provided ID not found')
+class UserResource(ProtectedResource):
+    @inject
+    def __init__(self, api: Api, svc: UserService):
+        super().__init__(api)
+        self.svc = svc
+
+    @api.doc(description="Get user by ID")
+    @api.marshal_with(user_model)
+    def get(self, id):
+        return self.svc.get(id)

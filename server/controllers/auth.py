@@ -1,17 +1,27 @@
 from flask import request, jsonify, _request_ctx_stack
+from flask_restplus import Resource
+from flask_injector import inject
+from injector import Module, Binder
 from functools import wraps
 from jose import jwt
 from werkzeug.exceptions import Unauthorized, Forbidden
+from .api import api
+from ..service.user_service import UserService
 import json
 import requests
 
 authorizations = {
-    'apikey': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'X-API-Key'
+    'oauth2': {
+        'type': 'oauth2',
+        'flow': 'implicit',
+        'authorizationUrl': 'https://kgrunwald.auth0.com/authorize?audience=https://api.stockbot.com',
+        'scopes': {
+            'read:users': 'Read all users'
+        }
     }
 }
+
+api.authorizations = authorizations
 
 AUTH0_DOMAIN = 'kgrunwald.auth0.com'
 API_AUDIENCE = 'https://api.stockbot.com'
@@ -94,12 +104,15 @@ def requires_auth(f):
     return decorated
 
 
-def requires_scope(required_scope):
+def requires_scope(api, required_scope):
     """Determines if the required scope is present in the Access Token
     Args:
         required_scope (str): The scope required to access the resource
     """
+    desc = 'Requires scope: `{}`'.format(required_scope)
+
     def scope_validator(f):
+        @api.doc(description=desc, security={'oauth2': [required_scope]})
         @wraps(f)
         def decorated(*args, **kwargs):
             _jwt_validator()
@@ -113,3 +126,28 @@ def requires_scope(required_scope):
             raise JWTForbidden("invalid_header", "Unable to find appropriate scope")
         return decorated
     return scope_validator
+
+
+class AuthUtils:
+    @inject
+    def __init__(self, user_svc: UserService):
+        self.user_svc = user_svc
+
+    def current_jwt(self):
+        return _request_ctx_stack.top.current_user
+
+    def current_user(self):
+        jwt = self.current_jwt()
+        return self.user_svc.get_by_uid(jwt['sub'])
+
+
+class AuthModule(Module):
+    def configure(self, binder: Binder):
+        binder.create_binding(AuthUtils, to=AuthUtils)
+
+
+@api.doc(security='oauth2')
+@api.response(401, 'Missing or invalid JWT')
+@api.response(403, 'Missing or invalid API scopes')
+class ProtectedResource(Resource):
+    method_decorators = [requires_auth]
