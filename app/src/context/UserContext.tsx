@@ -1,23 +1,25 @@
-import React from 'react'
-import {useAuth} from './AuthContext'
+import React from "react";
+import { useAuth } from "./AuthContext";
+import jwtDecode from "jwt-decode";
 
 const UserContext = React.createContext({
-  token: undefined
-})
+  user: undefined
+});
 
-const UserProvider = (props) => {
-  const {
-    token
-  } = useAuth()
-  return <UserContext.Provider value={{token}} {...props} />
-}
+const UserProvider = props => {
+  const { token } = useAuth();
+
+  const user = token ? jwtDecode(token) : undefined;
+
+  return <UserContext.Provider value={{ user }} {...props} />;
+};
 
 const useUser = () => {
-  const context = React.useContext(UserContext)
+  const context = React.useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUser must be used within a UserProvider`)
+    throw new Error(`useUser must be used within a UserProvider`);
   }
-  return context
-}
+  return context;
+};
 
-export {UserProvider, useUser}
+export { UserProvider, useUser };

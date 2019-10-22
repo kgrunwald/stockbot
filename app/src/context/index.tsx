@@ -1,15 +1,13 @@
-import React from 'react'
-import {AuthProvider} from './AuthContext'
-import {UserProvider} from './UserContext'
+import React from "react";
+import { AuthProvider } from "./AuthContext";
+import { UserProvider } from "./UserContext";
 
-const AppProviders = ({children}) => {
+const AppProviders = ({ children }) => {
   return (
     <AuthProvider>
-      <UserProvider>
-        {children}
-      </UserProvider>
+      <UserProvider>{children}</UserProvider>
     </AuthProvider>
-  )
-}
+  );
+};
 
-export default AppProviders
+export default AppProviders;

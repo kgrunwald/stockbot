@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const auth = useAuth()
+  const auth = useAuth();
   return (
     <View style={styles.container}>
       {<Button title="Log in with Auth0" onPress={auth.login} />}
