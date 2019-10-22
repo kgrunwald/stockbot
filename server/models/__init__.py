@@ -3,6 +3,7 @@ from .db import db
 from .user import User
 from .account import Account
 from .base import ACL
+from .query import *
 
 
 def modelize(cls, api):
@@ -19,6 +20,9 @@ def modelize(cls, api):
                     description=definition.description, required=definition.required)
             elif field_type.startswith('Integer'):
                 attr_dict[attr] = fields.Integer(
+                    description=definition.description, required=definition.required)
+            elif field_type.startswith('DateTime'):
+                attr_dict[attr] = fields.DateTime(
                     description=definition.description, required=definition.required)
             else:
                 raise 'Unkown field type ' + definition

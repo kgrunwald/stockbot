@@ -9,7 +9,7 @@ class ServiceModule(Module):
         self.configure_user(binder)
 
     def configure_user(self, binder: Binder):
-        binder.bind(UserService, to=UserService(), scope=request)
+        binder.bind(UserService, to=UserService, scope=request)
 
     def configure_acct(self, binder: Binder):
-        binder.bind(AccountService, to=AccountService(), scope=request)
+        binder.bind(AccountService, to=AccountService, scope=request)

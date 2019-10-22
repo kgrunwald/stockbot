@@ -1,12 +1,13 @@
-from flask import request, jsonify, _request_ctx_stack
+from flask import request, jsonify, g
 from flask_restplus import Resource
-from flask_injector import inject
+from flask_injector import inject, request as request_scope
 from injector import Module, Binder
 from functools import wraps
 from jose import jwt
 from werkzeug.exceptions import Unauthorized, Forbidden
 from .api import api
 from ..service.user_service import UserService
+from ..models.user import User
 import json
 import requests
 
@@ -90,7 +91,7 @@ def _jwt_validator():
         except Exception:
             raise JWTUnauthorized("invalid_header", "Unable to parse authentication token.")
 
-        _request_ctx_stack.top.current_user = payload
+        g.jwt = payload
         return
     raise JWTUnauthorized("invalid_header", "Unable to find appropriate key")
 
@@ -134,11 +135,13 @@ class AuthUtils:
         self.user_svc = user_svc
 
     def current_jwt(self):
-        return _request_ctx_stack.top.current_user
+        return g.jwt
 
     def current_user(self):
-        jwt = self.current_jwt()
-        return self.user_svc.get_by_uid(jwt['sub'])
+        if not hasattr(g, 'user') or g.user is None:
+            jwt = self.current_jwt()
+            g.user = self.user_svc.get_by_uid(jwt['sub'])
+        return g.user
 
 
 class AuthModule(Module):

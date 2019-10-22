@@ -9,7 +9,7 @@ acct_model = modelize(Account, api)
 
 
 @api.route('/')
-class AccountResource(ProtectedResource):
+class AccountsResource(ProtectedResource):
     @inject
     def __init__(self, api: Api, svc: AccountService, utils: AuthUtils):
         super().__init__(api)
@@ -30,7 +30,7 @@ class AccountResource(ProtectedResource):
 
 @api.route('/<int:id>')
 @api.response(404, 'Account with provided ID not found')
-class UserResource(ProtectedResource):
+class AccountResource(ProtectedResource):
     @inject
     def __init__(self, api: Api, svc: AccountService):
         super().__init__(api)

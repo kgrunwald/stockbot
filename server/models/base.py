@@ -2,22 +2,34 @@ from sqlalchemy.ext.declarative import declared_attr
 from .db import db, Column
 
 
-class Permission(db.Model):
+class BaseModel(db.Model):
+    __abstract__ = True
+
+    created = Column(db.DateTime, server_default=db.func.now(), description="Updated timestamp")
+    updated = Column(db.DateTime, onupdate=db.func.now(), description="Updated timestamp")
+
+
+class Permission(BaseModel):
     id = Column(db.Integer, primary_key=True)
     acl_id = Column(db.Integer, db.ForeignKey('acl.id'), nullable=False)
     user_id = Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', uselist=False)
     permission = Column(db.String, nullable=False, default='read')
 
+    def __repr__(self):
+        return '<Permission {} {} {}>'.format(self.user.username, self.permission, self.acl_id)
 
-class ACL(db.Model):
+
+class ACL(BaseModel):
     __tablename__ = 'acl'
 
     id = Column(db.Integer, primary_key=True)
     permissions = db.relationship('Permission', backref='acl', lazy=True)
 
 
-class ProtectedModel(object):
+class ProtectedModel(BaseModel):
+    __abstract__ = True
+
     @declared_attr
     def acl(self):
         return db.relationship('ACL', uselist=False)
@@ -39,6 +51,4 @@ class ProtectedModel(object):
         p.user = user
         p.permission = permission
         self.acl.permissions.append(p)
-        db.session.commit()
-        self.acl_id = self.acl.id
         return self.acl

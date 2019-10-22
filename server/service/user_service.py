@@ -12,7 +12,6 @@ class UserService:
         try:
             db.session.add(user)
             db.session.commit()
-            user.add_acl(user)
         except IntegrityError:
             raise BadRequest('A user with that information already exists')
         return user
@@ -21,9 +20,7 @@ class UserService:
         return User.query.all()
 
     def get(self, id):
-        user = User.query.get_or_404(id)
-        user.add_acl(user)
-        return user
+        return User.query.get_or_404(id)
 
     def get_by_uid(self, uid):
         return User.query.filter_by(uid=uid).first_or_404()

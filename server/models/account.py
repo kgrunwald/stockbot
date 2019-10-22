@@ -3,7 +3,7 @@ from .base import ProtectedModel
 from .db import db, Column
 
 
-class Account(ProtectedModel, db.Model):
+class Account(ProtectedModel):
     id = Column(db.Integer, primary_key=True,
                 description="Unique ID for the account in the database", required=True)
     api_key = Column(db.String(80), unique=True, nullable=False,

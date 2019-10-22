@@ -14,7 +14,7 @@ class AccountService:
         acct = Account()
         acct.api_key = data['api_key']
         acct.secret_key = data['secret_key']
-
+        acct.add_acl(user)
         user.account = acct
 
         try:
