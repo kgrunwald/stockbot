@@ -28,3 +28,6 @@ def create_app():
         return redirect('/swaggerui/oauth2-redirect.html')
 
     return app
+
+
+app = create_app()
