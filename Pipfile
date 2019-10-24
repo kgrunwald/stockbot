@@ -7,6 +7,8 @@ verify_ssl = true
 pylint = "*"
 autopep8 = "*"
 pytest-flask = "*"
+pytest = "*"
+pylint-flask = "*"
 
 [packages]
 flask = "*"
@@ -18,7 +20,6 @@ gunicorn = "*"
 python-dotenv = "*"
 flask-injector = "*"
 flask-restplus = "*"
-pylint-flask = "*"
 
 [requires]
-python_version = "3.7.4"
+python_version = "3.8.0"
