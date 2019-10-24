@@ -13,7 +13,7 @@ class Permission(BaseModel):
     id = Column(db.Integer, primary_key=True)
     acl_id = Column(db.Integer, db.ForeignKey('acl.id'), nullable=False)
     user_id = Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', uselist=False)
+    user = db.relationship('User', uselist=False, lazy='subquery')
     permission = Column(db.String, nullable=False, default='read')
 
     def __repr__(self):

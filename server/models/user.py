@@ -12,7 +12,7 @@ class User(BaseModel):
                  description="UID attribute of the JWT provided by Auth0", required=True)
     account_id = Column(db.Integer, db.ForeignKey('account.id'), nullable=True,
                         description="Account ID this user has access to")
-    account = db.relationship('Account', backref=db.backref('users', lazy=True))
+    account = db.relationship('Account', backref=db.backref('users', lazy='subquery'))
 
     permissions = db.relationship('Permission')
 
