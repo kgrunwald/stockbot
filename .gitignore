@@ -1,3 +1,6 @@
 .vscode
 stockbot.code-workspace
 **__pycache__**
+
+.DS_Store
+.buildenv
