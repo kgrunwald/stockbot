@@ -34,8 +34,7 @@ class AccountSummary extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         Format.currency.format(details.totalEquity),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Total Equity",
@@ -45,10 +44,7 @@ class AccountSummary extends StatelessWidget {
                   ),
                 ],
               ),
-              GrowthPercentage(
-                  percent: details.growthPercentage,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold)
+              GrowthPercentage(percent: details.growthPercentage, fontSize: 16, fontWeight: FontWeight.bold)
             ],
           ),
         ),

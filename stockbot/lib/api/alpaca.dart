@@ -45,8 +45,7 @@ class AlpacaApi {
   }
 
   Future<PortfolioHistory> fetchPortfolioHistory() async {
-    var response =
-        await _makeRequest("/v2/account/portfolio/history?period=3M");
+    var response = await _makeRequest("/v2/account/portfolio/history?period=3M");
     if (response.statusCode != 200) {
       return null;
     }
@@ -55,8 +54,7 @@ class AlpacaApi {
   }
 
   Future<Bars> fetchBars(String symbol, {int limit = 14}) async {
-    var response =
-        await _makeDataRequest("/v1/bars/1D?limit=$limit&symbols=$symbol");
+    var response = await _makeDataRequest("/v1/bars/1D?limit=$limit&symbols=$symbol");
     if (response.statusCode != 200) {
       return null;
     }
@@ -81,16 +79,12 @@ class AlpacaApi {
   }
 
   Future<http.Response> _makeRequest(String url) {
-    return http.get("https://paper-api.alpaca.markets$url", headers: {
-      "APCA-API-KEY-ID": _apiKey,
-      "APCA-API-SECRET-KEY": _secretKey
-    });
+    return http.get("https://paper-api.alpaca.markets$url",
+        headers: {"APCA-API-KEY-ID": _apiKey, "APCA-API-SECRET-KEY": _secretKey});
   }
 
   Future<http.Response> _makeDataRequest(String url) {
-    return http.get("https://data.alpaca.markets$url", headers: {
-      "APCA-API-KEY-ID": _apiKey,
-      "APCA-API-SECRET-KEY": _secretKey
-    });
+    return http.get("https://data.alpaca.markets$url",
+        headers: {"APCA-API-KEY-ID": _apiKey, "APCA-API-SECRET-KEY": _secretKey});
   }
 }

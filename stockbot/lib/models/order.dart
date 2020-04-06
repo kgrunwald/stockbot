@@ -9,14 +9,7 @@ class Order {
   int quantity;
   double averagePrice;
 
-  Order(
-      {this.id,
-      this.submittedAt,
-      this.side,
-      this.status,
-      this.symbol,
-      this.quantity,
-      this.averagePrice});
+  Order({this.id, this.submittedAt, this.side, this.status, this.symbol, this.quantity, this.averagePrice});
 
   double get price => quantity * averagePrice;
 

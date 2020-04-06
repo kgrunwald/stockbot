@@ -20,8 +20,7 @@ void setupLocator() {
 
   var stock = locator.get<StockPosition>();
   var bond = locator.get<BondPosition>();
-  locator.registerSingleton<AccountDetails>(
-      AccountDetails(stockPosition: stock, bondPosition: bond));
+  locator.registerSingleton<AccountDetails>(AccountDetails(stockPosition: stock, bondPosition: bond));
 
   var details = locator.get<AccountDetails>();
   locator.registerSingleton<PlanStatus>(PlanStatus(details, stock, bond));

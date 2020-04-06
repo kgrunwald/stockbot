@@ -6,8 +6,7 @@ class GrowthPercentage extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
 
-  GrowthPercentage(
-      {this.percent, this.fontSize, this.fontWeight = FontWeight.normal});
+  GrowthPercentage({this.percent, this.fontSize, this.fontWeight = FontWeight.normal});
 
   Color getTextColor(BuildContext context) {
     if (percent < 0) {
@@ -20,10 +19,7 @@ class GrowthPercentage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       Format.growthPercentage.format(this.percent),
-      style: TextStyle(
-          color: getTextColor(context),
-          fontSize: this.fontSize,
-          fontWeight: this.fontWeight),
+      style: TextStyle(color: getTextColor(context), fontSize: this.fontSize, fontWeight: this.fontWeight),
     );
   }
 }

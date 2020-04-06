@@ -80,10 +80,7 @@ class PlanStatus extends ChangeNotifier {
       // We are buying, make sure we have enough bond / cash to cover it
       var amount = numShares * stockPosition.currentPrice;
       if (amount > (bondPosition.marketValue + accountDetails.cashBalance)) {
-        return ((bondPosition.marketValue + accountDetails.cashBalance) /
-                stockPosition.currentPrice)
-            .floor()
-            .toInt();
+        return ((bondPosition.marketValue + accountDetails.cashBalance) / stockPosition.currentPrice).floor().toInt();
       }
     }
 

@@ -24,8 +24,7 @@ class AccountDetails extends ChangeNotifier {
     }
   }
 
-  double get growthPercentage =>
-      (totalEquity - totalBasis - cashBalance) / (totalBasis + cashBalance);
+  double get growthPercentage => (totalEquity - totalBasis - cashBalance) / (totalBasis + cashBalance);
 
   set cashBalance(double balance) {
     _cashBalance = balance;

@@ -13,12 +13,8 @@ class StockStatus extends StatelessWidget {
     return Row(
       children: <Widget>[
         IconWidget(
-          icon: stock.lastWeekPLPercent >= 0
-              ? Icons.trending_up
-              : Icons.trending_down,
-          color: stock.lastWeekPLPercent >= 0
-              ? Theme.of(context).accentColor
-              : Theme.of(context).errorColor,
+          icon: stock.lastWeekPLPercent >= 0 ? Icons.trending_up : Icons.trending_down,
+          color: stock.lastWeekPLPercent >= 0 ? Theme.of(context).accentColor : Theme.of(context).errorColor,
         ),
         Row(
           children: <Widget>[

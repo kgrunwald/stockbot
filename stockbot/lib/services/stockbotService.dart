@@ -83,8 +83,7 @@ class StockbotService {
     this.stockPosition.unrealizedPL = stock.unrealizedPL;
     this.stockPosition.unrealizedPLPercent = stock.unrealizedPLPercent;
     this.stockPosition.unrealizedIntradayPL = stock.unrealizedIntradayPL;
-    this.stockPosition.unrealizedIntradayPLPercent =
-        stock.unrealizedIntradayPLPercent;
+    this.stockPosition.unrealizedIntradayPLPercent = stock.unrealizedIntradayPLPercent;
 
     BondPosition bond = futures[2];
     this.bondPosition.symbol = bond.symbol;
@@ -96,8 +95,7 @@ class StockbotService {
     this.bondPosition.unrealizedPL = bond.unrealizedPL;
     this.bondPosition.unrealizedPLPercent = bond.unrealizedPLPercent;
     this.bondPosition.unrealizedIntradayPL = bond.unrealizedIntradayPL;
-    this.bondPosition.unrealizedIntradayPLPercent =
-        bond.unrealizedIntradayPLPercent;
+    this.bondPosition.unrealizedIntradayPLPercent = bond.unrealizedIntradayPLPercent;
 
     Bars tqqBars = futures[3];
     this.bars.bars = tqqBars.bars;
@@ -118,8 +116,7 @@ class StockbotService {
     }
     var tqqDiff = tqqLastClose - tqqWeekClose;
     this.stockPosition.lastWeekPLPercent = (tqqDiff) / tqqWeekClose;
-    this.stockPosition.currentPrice =
-        tqqBars.bars[tqqBars.bars.length - 1].close;
+    this.stockPosition.currentPrice = tqqBars.bars[tqqBars.bars.length - 1].close;
 
     Bars aggBars = futures[4];
     double aggWeekClose = 0;
@@ -135,8 +132,7 @@ class StockbotService {
     }
     var aggDiff = aggLastClose - aggWeekClose;
     this.bondPosition.lastWeekPLPercent = (aggDiff) / aggWeekClose;
-    this.bondPosition.currentPrice =
-        aggBars.bars[aggBars.bars.length - 1].close;
+    this.bondPosition.currentPrice = aggBars.bars[aggBars.bars.length - 1].close;
 
     this.status.target = 20000 * 1.09;
     this.status.is30Down = false;
@@ -164,8 +160,7 @@ class StockbotService {
   }
 
   void initWebsocket() async {
-    channel =
-        IOWebSocketChannel.connect('wss://alpaca.socket.polygon.io/stocks');
+    channel = IOWebSocketChannel.connect('wss://alpaca.socket.polygon.io/stocks');
     channel.stream.listen((message) {
       var data = json.decode(message);
       if (data[0]['status'] == "auth_success") {
@@ -175,8 +170,7 @@ class StockbotService {
       } else if (data[0]['status'] == "connected") {
         log("Websocket connected");
         channel.sink.add('{"action":"auth","params":"AKYGMS27W5ON3I3046HV"}');
-      } else if (data[0]['message'] == "subscribed to: Q.TQQQ" ||
-          data[0]['message'] == "subscribed to: Q.AGG") {
+      } else if (data[0]['message'] == "subscribed to: Q.TQQQ" || data[0]['message'] == "subscribed to: Q.AGG") {
         log("Websocket subscribed");
       } else {
         log("Got Quote: $message");

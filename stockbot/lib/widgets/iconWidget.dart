@@ -12,14 +12,10 @@ class IconWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
-          decoration: new BoxDecoration(
-              color: this.color,
-              borderRadius: new BorderRadius.all(Radius.circular(8))),
+          decoration: new BoxDecoration(color: this.color, borderRadius: new BorderRadius.all(Radius.circular(8))),
           child: Padding(
             padding: const EdgeInsets.all(6.0),
-            child: Icon(this.icon,
-                color: (iconColor != null) ? iconColor : Colors.white,
-                size: 28),
+            child: Icon(this.icon, color: (iconColor != null) ? iconColor : Colors.white, size: 28),
           )),
     );
   }

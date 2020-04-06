@@ -17,8 +17,7 @@ class Vizualization extends StatelessWidget {
   final double startBalance;
   final double targetBalance;
 
-  Vizualization(
-      {this.bars, this.quantity, this.startBalance, this.targetBalance});
+  Vizualization({this.bars, this.quantity, this.startBalance, this.targetBalance});
 
   List<charts.Series<BalancePoint, DateTime>> data() {
     var data = List<BalancePoint>();
@@ -29,8 +28,7 @@ class Vizualization extends StatelessWidget {
     return [
       new charts.Series<BalancePoint, DateTime>(
         id: 'Balance',
-        colorFn: (_, __) =>
-            charts.ColorUtil.fromDartColor(StockbotColors.Secondary),
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(StockbotColors.Secondary),
         domainFn: (BalancePoint point, _) => point.date,
         measureFn: (BalancePoint point, _) => point.balance,
         data: data,
@@ -39,8 +37,7 @@ class Vizualization extends StatelessWidget {
   }
 
   final simpleCurrencyFormatter =
-      new charts.BasicNumericTickFormatterSpec.fromNumberFormat(
-          new NumberFormat.compactSimpleCurrency());
+      new charts.BasicNumericTickFormatterSpec.fromNumberFormat(new NumberFormat.compactSimpleCurrency());
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +52,15 @@ class Vizualization extends StatelessWidget {
                 dateTimeFactory: const charts.LocalDateTimeFactory(),
                 defaultRenderer: charts.LineRendererConfig(includeArea: true),
                 domainAxis: charts.DateTimeAxisSpec(
-                    renderSpec: charts.SmallTickRendererSpec(
-                        labelStyle:
-                            charts.TextStyleSpec(color: charts.Color.white))),
+                    renderSpec:
+                        charts.SmallTickRendererSpec(labelStyle: charts.TextStyleSpec(color: charts.Color.white))),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                     tickFormatterSpec: simpleCurrencyFormatter,
-                    tickProviderSpec: charts.StaticNumericTickProviderSpec([
-                      charts.TickSpec(this.startBalance),
-                      charts.TickSpec(this.targetBalance)
-                    ]),
+                    tickProviderSpec: charts.StaticNumericTickProviderSpec(
+                        [charts.TickSpec(this.startBalance), charts.TickSpec(this.targetBalance)]),
                     renderSpec: charts.GridlineRendererSpec(
-                        labelStyle:
-                            charts.TextStyleSpec(color: charts.Color.white),
-                        lineStyle:
-                            charts.LineStyleSpec(dashPattern: [1, 0, 1]))))),
+                        labelStyle: charts.TextStyleSpec(color: charts.Color.white),
+                        lineStyle: charts.LineStyleSpec(dashPattern: [1, 0, 1]))))),
       ),
     );
   }

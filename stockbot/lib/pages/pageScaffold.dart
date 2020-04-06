@@ -17,8 +17,7 @@ class PageScaffold extends StatefulWidget {
   _PageScaffoldState createState() => _PageScaffoldState();
 }
 
-class _PageScaffoldState extends State<PageScaffold>
-    with TickerProviderStateMixin<PageScaffold> {
+class _PageScaffoldState extends State<PageScaffold> with TickerProviderStateMixin<PageScaffold> {
   final Widget body;
   int _currentIndex = 0;
   bool authenticated = false;
@@ -29,8 +28,7 @@ class _PageScaffoldState extends State<PageScaffold>
     try {
       var localAuth = LocalAuthentication();
       return authenticated = await localAuth.authenticateWithBiometrics(
-          localizedReason: "You must log in to see the settings page",
-          stickyAuth: true);
+          localizedReason: "You must log in to see the settings page", stickyAuth: true);
     } on PlatformException catch (e) {
       log("Exception in authentication: ${e.message}");
       return authenticated = false;
@@ -62,12 +60,9 @@ class _PageScaffoldState extends State<PageScaffold>
               });
             },
             items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.trending_up), title: Text('Home')),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance), title: Text('Portfolio')),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), title: Text('Settings'))
+              BottomNavigationBarItem(icon: Icon(Icons.trending_up), title: Text('Home')),
+              BottomNavigationBarItem(icon: Icon(Icons.account_balance), title: Text('Portfolio')),
+              BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings'))
             ]),
         body: Padding(
             padding: const EdgeInsets.only(top: 72.0, left: 16, right: 16),

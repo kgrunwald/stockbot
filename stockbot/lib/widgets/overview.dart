@@ -26,8 +26,7 @@ class Overview extends StatelessWidget {
   Widget build(BuildContext context) {
     return HeroWidget(
       title: Format.currency.format(status.stockPosition.marketValue),
-      subTitle:
-          "${Format.percentage.format(status.percentageFromTarget)}  $_targetDiff",
+      subTitle: "${Format.percentage.format(status.percentageFromTarget)}  $_targetDiff",
       subTitleColor: _getPerformanceTextColor(context),
     );
   }

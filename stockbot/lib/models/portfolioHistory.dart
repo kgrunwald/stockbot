@@ -11,8 +11,7 @@ class PortfolioHistory extends ChangeNotifier {
 
   PortfolioHistory.init();
 
-  PortfolioHistory(
-      {timestamp, equity, profitLoss, profitLossPercent, baseValue}) {
+  PortfolioHistory({timestamp, equity, profitLoss, profitLossPercent, baseValue}) {
     this.timestamp = timestamp;
     this.equity = equity;
     this.profitLoss = profitLoss;
@@ -26,8 +25,7 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<DateTime> get timestamp =>
-      UnmodifiableListView(_timestamp);
+  UnmodifiableListView<DateTime> get timestamp => UnmodifiableListView(_timestamp);
 
   set equity(List<double> eq) {
     _equity.clear();
@@ -43,8 +41,7 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<double> get profitLoss =>
-      UnmodifiableListView(_profitLoss);
+  UnmodifiableListView<double> get profitLoss => UnmodifiableListView(_profitLoss);
 
   set profitLossPercent(List<double> plpc) {
     _profitLossPercent.clear();
@@ -52,8 +49,7 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<double> get profitLossPercent =>
-      UnmodifiableListView(_profitLossPercent);
+  UnmodifiableListView<double> get profitLossPercent => UnmodifiableListView(_profitLossPercent);
 
   set baseValue(double val) {
     _baseValue = val;

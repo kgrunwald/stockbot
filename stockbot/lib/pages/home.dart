@@ -58,10 +58,8 @@ class _HomePageState extends State<HomePage> {
             }
             return Container();
           }),
-      Consumer<PlanStatus>(
-          builder: (_, status, __) => PlanSummary(status: status)),
-      Consumer<AccountDetails>(
-          builder: (_, details, __) => AccountSummary(details: details))
+      Consumer<PlanStatus>(builder: (_, status, __) => PlanSummary(status: status)),
+      Consumer<AccountDetails>(builder: (_, details, __) => AccountSummary(details: details))
     ]);
   }
 }

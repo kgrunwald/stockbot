@@ -124,8 +124,7 @@ class PositionDetails extends ChangeNotifier {
     this.unrealizedPL = double.parse(json['unrealized_pl']);
     this.unrealizedPLPercent = double.parse(json['unrealized_plpc']);
     this.unrealizedIntradayPL = double.parse(json['unrealized_intraday_pl']);
-    this.unrealizedIntradayPLPercent =
-        double.parse(json['unrealized_intraday_plpc']);
+    this.unrealizedIntradayPLPercent = double.parse(json['unrealized_intraday_plpc']);
   }
 }
 

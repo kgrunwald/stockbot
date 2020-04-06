@@ -31,8 +31,7 @@ class AccountVizualization extends StatelessWidget {
     return [
       new charts.Series<BalancePoint, DateTime>(
         id: 'Balance',
-        colorFn: (_, __) =>
-            charts.ColorUtil.fromDartColor(StockbotColors.Secondary),
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(StockbotColors.Secondary),
         domainFn: (BalancePoint point, _) => point.date,
         measureFn: (BalancePoint point, _) => point.balance,
         data: data,
@@ -41,8 +40,7 @@ class AccountVizualization extends StatelessWidget {
   }
 
   final simpleCurrencyFormatter =
-      new charts.BasicNumericTickFormatterSpec.fromNumberFormat(
-          new NumberFormat.compactSimpleCurrency());
+      new charts.BasicNumericTickFormatterSpec.fromNumberFormat(new NumberFormat.compactSimpleCurrency());
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +58,13 @@ class AccountVizualization extends StatelessWidget {
                 dateTimeFactory: const charts.LocalDateTimeFactory(),
                 defaultRenderer: charts.LineRendererConfig(includeArea: true),
                 domainAxis: charts.DateTimeAxisSpec(
-                    renderSpec: charts.SmallTickRendererSpec(
-                        labelStyle:
-                            charts.TextStyleSpec(color: charts.Color.white))),
+                    renderSpec:
+                        charts.SmallTickRendererSpec(labelStyle: charts.TextStyleSpec(color: charts.Color.white))),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                     tickFormatterSpec: simpleCurrencyFormatter,
                     renderSpec: charts.GridlineRendererSpec(
-                        labelStyle:
-                            charts.TextStyleSpec(color: charts.Color.white),
-                        lineStyle:
-                            charts.LineStyleSpec(dashPattern: [1, 0, 1]))))),
+                        labelStyle: charts.TextStyleSpec(color: charts.Color.white),
+                        lineStyle: charts.LineStyleSpec(dashPattern: [1, 0, 1]))))),
       ),
     );
   }

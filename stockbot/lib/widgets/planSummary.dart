@@ -25,8 +25,7 @@ class PlanSummary extends StatelessWidget {
                   width: 195,
                   child: StockStatus(stock: status.stockPosition),
                 ),
-                Container(
-                    width: 180, child: StockStatus(stock: status.bondPosition)),
+                Container(width: 180, child: StockStatus(stock: status.bondPosition)),
               ],
             ),
             Row(
@@ -36,23 +35,12 @@ class PlanSummary extends StatelessWidget {
                   width: 185,
                   child: DetailTable(
                     children: [
-                      DetailTable.textRow(
-                          "9Sig Target", Format.currency.format(status.target)),
-                      DetailTable.textRow(
-                          status.differenceFromTarget >= 0
-                              ? "Surplus"
-                              : "Shortfall",
+                      DetailTable.textRow("9Sig Target", Format.currency.format(status.target)),
+                      DetailTable.textRow(status.differenceFromTarget >= 0 ? "Surplus" : "Shortfall",
                           Format.currency.format(status.differenceFromTarget)),
-                      DetailTable.textRow(
-                          "TQQQ",
-                          Format.currency
-                              .format(status.stockPosition.marketValue)),
-                      DetailTable.textRow(
-                          "AGG",
-                          Format.currency
-                              .format(status.bondPosition.marketValue)),
-                      DetailTable.textRow(
-                          "30 Down", status.is30Down ? "Yes" : "No"),
+                      DetailTable.textRow("TQQQ", Format.currency.format(status.stockPosition.marketValue)),
+                      DetailTable.textRow("AGG", Format.currency.format(status.bondPosition.marketValue)),
+                      DetailTable.textRow("30 Down", status.is30Down ? "Yes" : "No"),
                       DetailTable.textRow("TQQQ Action",
                           "${status.stockAction} ${status.stockAction != "None" ? status.stockActionAmount : ""}"),
                     ],
@@ -62,18 +50,11 @@ class PlanSummary extends StatelessWidget {
                   width: 185,
                   child: DetailTable(
                     children: [
-                      DetailTable.textRow(
-                          "From Plan",
-                          Format.growthPercentage
-                              .format(status.percentageFromTarget)),
-                      DetailTable.textRow(
-                          "Target Shares", "${status.targetStockShares}"),
-                      DetailTable.textRow(
-                          "TQQQ Shares", "${status.stockPosition.quantity}"),
-                      DetailTable.textRow(
-                          "AGG Shares", "${status.bondPosition.quantity}"),
-                      DetailTable.textRow(
-                          "AGG to \$0", status.bondSignalTo0 ? "Yes" : "No"),
+                      DetailTable.textRow("From Plan", Format.growthPercentage.format(status.percentageFromTarget)),
+                      DetailTable.textRow("Target Shares", "${status.targetStockShares}"),
+                      DetailTable.textRow("TQQQ Shares", "${status.stockPosition.quantity}"),
+                      DetailTable.textRow("AGG Shares", "${status.bondPosition.quantity}"),
+                      DetailTable.textRow("AGG to \$0", status.bondSignalTo0 ? "Yes" : "No"),
                       DetailTable.textRow("AGG Action",
                           "${status.bondAction} ${status.bondAction != "None" ? status.bondActionAmount : ""}"),
                     ],

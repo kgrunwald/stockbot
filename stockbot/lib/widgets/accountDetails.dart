@@ -31,8 +31,7 @@ class AccountDetails extends StatelessWidget {
 
   acctModel.AccountDetails acctDetails;
 
-  AccountDetails(
-      {this.history, this.stockPosition, this.bondPosition, this.acctDetails});
+  AccountDetails({this.history, this.stockPosition, this.bondPosition, this.acctDetails});
 
   List<charts.Series<Data, int>> seriesData(BuildContext context) {
     bondPercentage = bondPosition.marketValue / acctDetails.totalEquity;
@@ -40,12 +39,9 @@ class AccountDetails extends StatelessWidget {
     cashPercentage = acctDetails.cashBalance / acctDetails.totalEquity;
 
     final data = [
-      new Data(bondPosition.symbol, bondPosition.marketValue, bondPercentage,
-          StockbotColors.Accent4),
-      new Data(stockPosition.symbol, stockPosition.marketValue, stockPercentage,
-          StockbotColors.Accent1),
-      new Data("Cash", acctDetails.cashBalance, cashPercentage,
-          StockbotColors.Accent2)
+      new Data(bondPosition.symbol, bondPosition.marketValue, bondPercentage, StockbotColors.Accent4),
+      new Data(stockPosition.symbol, stockPosition.marketValue, stockPercentage, StockbotColors.Accent1),
+      new Data("Cash", acctDetails.cashBalance, cashPercentage, StockbotColors.Accent2)
     ];
 
     return [
@@ -74,10 +70,7 @@ class AccountDetails extends StatelessWidget {
         HeroWidget(
             title: Format.currency.format(acctDetails.totalEquity),
             subTitle: "Account Balance",
-            right: GrowthPercentage(
-                percent: acctDetails.growthPercentage,
-                fontSize: 18,
-                fontWeight: FontWeight.bold)),
+            right: GrowthPercentage(percent: acctDetails.growthPercentage, fontSize: 18, fontWeight: FontWeight.bold)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -111,8 +104,7 @@ class AccountDetails extends StatelessWidget {
                     ),
                   ),
                   Text(stockPosition.symbol, style: textStyle),
-                  Text(Format.percentage.format(stockPercentage),
-                      style: detailTextStyle, textAlign: TextAlign.end),
+                  Text(Format.percentage.format(stockPercentage), style: detailTextStyle, textAlign: TextAlign.end),
                   Text(Format.currency.format(stockPosition.marketValue),
                       style: detailTextStyle, textAlign: TextAlign.end),
                 ]),
@@ -126,8 +118,7 @@ class AccountDetails extends StatelessWidget {
                     ),
                   ),
                   Text(bondPosition.symbol, style: textStyle),
-                  Text(Format.percentage.format(bondPercentage),
-                      style: detailTextStyle, textAlign: TextAlign.end),
+                  Text(Format.percentage.format(bondPercentage), style: detailTextStyle, textAlign: TextAlign.end),
                   Text(Format.currency.format(bondPosition.marketValue),
                       style: detailTextStyle, textAlign: TextAlign.end),
                 ]),
@@ -141,8 +132,7 @@ class AccountDetails extends StatelessWidget {
                     ),
                   ),
                   Text("Cash", style: textStyle),
-                  Text(Format.percentage.format(cashPercentage),
-                      style: detailTextStyle, textAlign: TextAlign.end),
+                  Text(Format.percentage.format(cashPercentage), style: detailTextStyle, textAlign: TextAlign.end),
                   Text(
                     Format.currency.format(acctDetails.cashBalance),
                     style: detailTextStyle,
@@ -155,8 +145,7 @@ class AccountDetails extends StatelessWidget {
         ),
         SectionHeader("Performance"),
         Consumer<acctModel.AccountDetails>(
-            builder: (_, details, __) =>
-                AccountVizualization(history: history, details: details)),
+            builder: (_, details, __) => AccountVizualization(history: history, details: details)),
         SectionHeader("Order History"),
         DetailTable(
             columnWidths: {
@@ -168,11 +157,7 @@ class AccountDetails extends StatelessWidget {
             },
             children: acctDetails.orders
                 .map((order) => DetailTable.stockOrderRow(
-                    order.symbol,
-                    order.side,
-                    order.formattedTime,
-                    order.quantity,
-                    order.price))
+                    order.symbol, order.side, order.formattedTime, order.quantity, order.price))
                 .toList())
       ],
     );

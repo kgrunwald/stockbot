@@ -6,11 +6,7 @@ class HeroWidget extends StatelessWidget {
   final Color subTitleColor;
   final Widget right;
 
-  HeroWidget(
-      {this.title,
-      this.subTitle,
-      this.subTitleColor = Colors.white,
-      this.right});
+  HeroWidget({this.title, this.subTitle, this.subTitleColor = Colors.white, this.right});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +26,7 @@ class HeroWidget extends StatelessWidget {
                   ),
                   Text(
                     this.subTitle,
-                    style: TextStyle(
-                        fontSize: 16, height: 1.5, color: subTitleColor),
+                    style: TextStyle(fontSize: 16, height: 1.5, color: subTitleColor),
                   ),
                 ],
               ),

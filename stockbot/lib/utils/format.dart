@@ -7,7 +7,6 @@ class Format {
   static const _locale = "en_US";
 
   static final currency = new NumberFormat(_format, _locale);
-  static final growthPercentage =
-      new NumberFormat(_growthPercentFormat, _locale);
+  static final growthPercentage = new NumberFormat(_growthPercentFormat, _locale);
   static final percentage = new NumberFormat(_percentFormat, _locale);
 }
