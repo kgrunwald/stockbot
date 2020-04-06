@@ -11,10 +11,12 @@ import 'package:Stockbot/models/positionDetails.dart';
 class AlpacaApi {
   String _apiKey = "";
   String _secretKey = "";
+  String _baseUrl = "";
 
-  void setCredentials(String key, String secret) {
+  void setCredentials(String key, String secret, String url) {
     _apiKey = key;
     _secretKey = secret;
+    _baseUrl = url;
   }
 
   Future<AccountDetails> fetchAccountDetails() async {
@@ -79,7 +81,7 @@ class AlpacaApi {
   }
 
   Future<http.Response> _makeRequest(String url) {
-    return http.get("https://paper-api.alpaca.markets$url",
+    return http.get("$_baseUrl$url",
         headers: {"APCA-API-KEY-ID": _apiKey, "APCA-API-SECRET-KEY": _secretKey});
   }
 

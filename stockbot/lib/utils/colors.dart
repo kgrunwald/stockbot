@@ -6,7 +6,7 @@ class StockbotColors {
   static const Accent3 = Color.fromRGBO(67, 237, 185, 1);
   static const Accent4 = Color.fromRGBO(15, 124, 82, 1);
 
-  static const Secondary = Color.fromRGBO(110, 100, 251, 1);
+  static const Secondary = Color.fromRGBO(90, 100, 251, 1);
   static const Tertiary = Color.fromRGBO(98, 207, 253, 1);
   static const TertiaryLight = Color.fromRGBO(180, 242, 254, 1);
 

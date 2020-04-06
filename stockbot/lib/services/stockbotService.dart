@@ -26,8 +26,10 @@ class StockbotService {
   final StorageService storage = locator.get<StorageService>();
   String _apiKey = "";
   String _apiSecretKey = "";
+  String _apiUrl = "https://paper-api.alpaca.markets";
   static const _StorageKeyAlpacaApiKey = "ALPACA_API_KEY";
   static const _StorageKeyAlpacaApiSecretKey = "ALPACA_API_SECRET_KEY";
+  static const _StorageKeyAlpacaUrl = "ALPACA_API_URL";
 
   StockbotService() {
     accountDetails = locator.get<AccountDetails>();
@@ -42,7 +44,8 @@ class StockbotService {
   Future<void> setCredentials() async {
     _apiKey = await storage.read(_StorageKeyAlpacaApiKey);
     _apiSecretKey = await storage.read(_StorageKeyAlpacaApiSecretKey);
-    api.setCredentials(_apiKey, _apiSecretKey);
+    _apiUrl = await storage.read(_StorageKeyAlpacaUrl);
+    api.setCredentials(_apiKey, _apiSecretKey, _apiUrl);
   }
 
   Future<void> setApiKey(String key) async {
@@ -55,8 +58,14 @@ class StockbotService {
     setCredentials();
   }
 
+  Future<void> setApiUrl(String url) async {
+    await storage.write(_StorageKeyAlpacaUrl, url);
+    setCredentials();
+  }
+
   String get apiKey => _apiKey;
   String get apiSecretKey => _apiSecretKey;
+  String get apiUrl => _apiUrl;
 
   Future<void> start() async {
     await setCredentials();

@@ -22,11 +22,11 @@ class HeroWidget extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     this.title,
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     this.subTitle,
-                    style: TextStyle(fontSize: 16, height: 1.5, color: subTitleColor),
+                    style: TextStyle(fontSize: 14, height: 1.5, color: subTitleColor),
                   ),
                 ],
               ),

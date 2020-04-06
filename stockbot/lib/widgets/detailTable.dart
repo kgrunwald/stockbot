@@ -13,10 +13,10 @@ class DetailTable extends StatelessWidget {
 
   static TableRow textRow(String label, String value) {
     return TableRow(children: [
-      Padding(padding: _padding, child: Text(label, style: TextStyle(color: Colors.grey.shade400))),
+      Padding(padding: _padding, child: Text(label, style: TextStyle(color: Colors.grey.shade400, fontSize: 12))),
       Padding(
         padding: _padding,
-        child: Text(value, textAlign: TextAlign.end, style: TextStyle(fontSize: 16)),
+        child: Text(value, textAlign: TextAlign.end, style: TextStyle(fontSize: 12)),
       )
     ]);
   }
@@ -34,19 +34,19 @@ class DetailTable extends StatelessWidget {
       Padding(padding: _padding, child: Text(stock, style: TextStyle(fontWeight: FontWeight.bold, color: color))),
       Padding(
         padding: _padding,
-        child: Text(date, style: TextStyle(fontSize: 16, color: Colors.grey.shade400)),
+        child: Text(date, style: TextStyle(fontSize: 12, color: Colors.grey.shade400)),
       ),
       Padding(
         padding: _padding,
-        child: Text(side, style: TextStyle(fontSize: 16, color: Colors.grey.shade400)),
+        child: Text(side, style: TextStyle(fontSize: 12, color: Colors.grey.shade400)),
       ),
       Padding(
         padding: _padding,
-        child: Text("$quantity", textAlign: TextAlign.end, style: TextStyle(fontSize: 16, color: Colors.grey.shade400)),
+        child: Text("$quantity", textAlign: TextAlign.end, style: TextStyle(fontSize: 12, color: Colors.grey.shade400)),
       ),
       Padding(
         padding: _padding,
-        child: Text(Format.currency.format(price), textAlign: TextAlign.end, style: TextStyle(fontSize: 16)),
+        child: Text(Format.currency.format(price), textAlign: TextAlign.end, style: TextStyle(fontSize: 12)),
       )
     ]);
   }

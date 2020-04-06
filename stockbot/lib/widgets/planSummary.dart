@@ -21,18 +21,18 @@ class PlanSummary extends StatelessWidget {
             Row(children: <Widget>[SectionHeader("9Sig Summary")]),
             Row(
               children: <Widget>[
-                Container(
-                  width: 195,
+                Expanded(
+                  flex: 1,
                   child: StockStatus(stock: status.stockPosition),
                 ),
-                Container(width: 180, child: StockStatus(stock: status.bondPosition)),
+                Expanded(flex: 1, child: StockStatus(stock: status.bondPosition)),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  width: 185,
+                Expanded(
+                  flex: 20,
                   child: DetailTable(
                     children: [
                       DetailTable.textRow("9Sig Target", Format.currency.format(status.target)),
@@ -46,8 +46,9 @@ class PlanSummary extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  width: 185,
+                Spacer(flex: 1),
+                Expanded(
+                  flex: 20,
                   child: DetailTable(
                     children: [
                       DetailTable.textRow("From Plan", Format.growthPercentage.format(status.percentageFromTarget)),

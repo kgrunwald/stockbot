@@ -54,10 +54,10 @@ class AccountDetails extends StatelessWidget {
     ];
   }
 
-  final TextStyle textStyle = TextStyle(fontSize: 16, height: 1.75);
+  final TextStyle textStyle = TextStyle(fontSize: 14, height: 1.75);
 
   final TextStyle detailTextStyle = TextStyle(
-    fontSize: 16,
+    fontSize: 14,
     height: 1.75,
     color: Colors.grey.shade200,
     fontWeight: FontWeight.w100,
@@ -75,23 +75,23 @@ class AccountDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 150,
-              width: 150,
+              height: 120,
+              width: 120,
               margin: EdgeInsets.only(right: 8),
               child: charts.PieChart(
                 seriesData(context),
                 animate: false,
                 defaultRenderer: charts.ArcRendererConfig(
-                  arcWidth: 18,
+                  arcWidth: 12,
                 ),
               ),
             ),
             Table(
               columnWidths: {
                 0: FixedColumnWidth(15),
-                1: FixedColumnWidth(50),
-                2: FixedColumnWidth(60),
-                3: FixedColumnWidth(95),
+                1: FixedColumnWidth(40),
+                2: FixedColumnWidth(50),
+                3: FixedColumnWidth(85),
               },
               children: <TableRow>[
                 TableRow(children: <Widget>[

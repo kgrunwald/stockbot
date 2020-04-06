@@ -33,22 +33,52 @@ class Credentials extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "Alpaca API Secret Key",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Alpaca API Secret Key",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+              TextFormField(
+                autocorrect: false,
+                autofocus: false,
+                enabled: true,
+                initialValue: stockbot.apiSecretKey,
+                onChanged: (key) => stockbot.setApiSecretKey(key),
+              )
+            ],
+          ),
         ),
-        TextFormField(
-          autocorrect: false,
-          autofocus: false,
-          enabled: true,
-          initialValue: stockbot.apiSecretKey,
-          onChanged: (key) => stockbot.setApiSecretKey(key),
-        )
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Alpaca API URL",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+              TextFormField(
+                autocorrect: false,
+                autofocus: false,
+                enabled: true,
+                initialValue: stockbot.apiUrl,
+                onChanged: (url) => stockbot.setApiUrl(url),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }

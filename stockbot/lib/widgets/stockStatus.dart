@@ -23,7 +23,7 @@ class StockStatus extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "${stock.symbol}  ${Format.currency.format(stock.currentPrice)}",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Row(
                   children: <Widget>[
