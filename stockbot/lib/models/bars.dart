@@ -14,13 +14,12 @@ class Bar {
 
   factory Bar.fromJson(Map<String, dynamic> json) {
     return Bar(
-      time: DateTime.fromMillisecondsSinceEpoch(json['t'] * 1000),
-      open: json['o'].toDouble(),
-      close: json['c'].toDouble(),
-      high: json['h'].toDouble(),
-      low: json['l'].toDouble(),
-      volume: json['v'].toInt()
-    );
+        time: DateTime.fromMillisecondsSinceEpoch(json['t'] * 1000),
+        open: json['o'].toDouble(),
+        close: json['c'].toDouble(),
+        high: json['h'].toDouble(),
+        low: json['l'].toDouble(),
+        volume: json['v'].toInt());
   }
 }
 
@@ -46,7 +45,7 @@ class Bars extends ChangeNotifier {
     var symbolBars = json[symbol];
     var bars = List<Bar>();
     if (symbolBars != null) {
-      for(var bar in symbolBars) {
+      for (var bar in symbolBars) {
         bars.add(Bar.fromJson(bar));
       }
     }

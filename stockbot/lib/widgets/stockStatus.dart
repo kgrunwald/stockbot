@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stockbot/models/positionDetails.dart';
-import 'package:stockbot/utils/format.dart';
-import 'package:stockbot/widgets/iconWidget.dart';
+import 'package:Stockbot/models/positionDetails.dart';
+import 'package:Stockbot/utils/format.dart';
+import 'package:Stockbot/widgets/iconWidget.dart';
 
 class StockStatus extends StatelessWidget {
   final PositionDetails stock;
@@ -13,8 +13,12 @@ class StockStatus extends StatelessWidget {
     return Row(
       children: <Widget>[
         IconWidget(
-          icon: stock.lastWeekPLPercent >= 0 ? Icons.trending_up : Icons.trending_down,
-          color: stock.lastWeekPLPercent >= 0 ? Theme.of(context).accentColor : Theme.of(context).errorColor,
+          icon: stock.lastWeekPLPercent >= 0
+              ? Icons.trending_up
+              : Icons.trending_down,
+          color: stock.lastWeekPLPercent >= 0
+              ? Theme.of(context).accentColor
+              : Theme.of(context).errorColor,
         ),
         Row(
           children: <Widget>[

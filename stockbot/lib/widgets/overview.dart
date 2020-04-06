@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stockbot/models/planStatus.dart';
-import 'package:stockbot/utils/format.dart';
-import 'package:stockbot/widgets/heroWidget.dart';
+import 'package:Stockbot/models/planStatus.dart';
+import 'package:Stockbot/utils/format.dart';
+import 'package:Stockbot/widgets/heroWidget.dart';
 
 class Overview extends StatelessWidget {
   final PlanStatus status;
@@ -18,15 +18,16 @@ class Overview extends StatelessWidget {
   Color _getPerformanceTextColor(BuildContext context) {
     if (status.percentageFromTarget < 0) {
       return Theme.of(context).errorColor;
-    } 
-    return Theme.of(context).accentColor;
+    }
+    return Theme.of(context).primaryColor;
   }
 
   @override
   Widget build(BuildContext context) {
     return HeroWidget(
       title: Format.currency.format(status.stockPosition.marketValue),
-      subTitle: "${Format.percentage.format(status.percentageFromTarget)}  $_targetDiff",
+      subTitle:
+          "${Format.percentage.format(status.percentageFromTarget)}  $_targetDiff",
       subTitleColor: _getPerformanceTextColor(context),
     );
   }

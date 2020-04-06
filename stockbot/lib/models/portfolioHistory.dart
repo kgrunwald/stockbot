@@ -11,13 +11,8 @@ class PortfolioHistory extends ChangeNotifier {
 
   PortfolioHistory.init();
 
-  PortfolioHistory({
-    timestamp, 
-    equity,
-    profitLoss,
-    profitLossPercent,
-    baseValue
-  }) {
+  PortfolioHistory(
+      {timestamp, equity, profitLoss, profitLossPercent, baseValue}) {
     this.timestamp = timestamp;
     this.equity = equity;
     this.profitLoss = profitLoss;
@@ -31,7 +26,8 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<DateTime> get timestamp => UnmodifiableListView(_timestamp);
+  UnmodifiableListView<DateTime> get timestamp =>
+      UnmodifiableListView(_timestamp);
 
   set equity(List<double> eq) {
     _equity.clear();
@@ -47,7 +43,8 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<double> get profitLoss => UnmodifiableListView(_profitLoss);
+  UnmodifiableListView<double> get profitLoss =>
+      UnmodifiableListView(_profitLoss);
 
   set profitLossPercent(List<double> plpc) {
     _profitLossPercent.clear();
@@ -55,7 +52,8 @@ class PortfolioHistory extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnmodifiableListView<double> get profitLossPercent => UnmodifiableListView(_profitLossPercent);
+  UnmodifiableListView<double> get profitLossPercent =>
+      UnmodifiableListView(_profitLossPercent);
 
   set baseValue(double val) {
     _baseValue = val;
@@ -66,7 +64,7 @@ class PortfolioHistory extends ChangeNotifier {
 
   static List<double> _toDouble(List<dynamic> l) {
     var doubles = List<double>();
-    for(var d in l) {
+    for (var d in l) {
       doubles.add(d.toDouble());
     }
 
@@ -80,11 +78,10 @@ class PortfolioHistory extends ChangeNotifier {
     }
 
     return PortfolioHistory(
-      timestamp: dts,
-      equity: _toDouble(json['equity']),
-      profitLoss: _toDouble(json['profit_loss']),
-      profitLossPercent: _toDouble(json['profit_loss_pct']),
-      baseValue: json['base_value'].toDouble()
-    );
+        timestamp: dts,
+        equity: _toDouble(json['equity']),
+        profitLoss: _toDouble(json['profit_loss']),
+        profitLossPercent: _toDouble(json['profit_loss_pct']),
+        baseValue: json['base_value'].toDouble());
   }
 }

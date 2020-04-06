@@ -1,12 +1,11 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stockbot/models/account.dart';
-import 'package:stockbot/utils/format.dart';
-import 'package:stockbot/widgets/growthPercentage.dart';
-import 'package:stockbot/widgets/iconWidget.dart';
-import 'package:stockbot/widgets/sectionHeader.dart';
+import 'package:Stockbot/models/account.dart';
+import 'package:Stockbot/utils/format.dart';
+import 'package:Stockbot/widgets/growthPercentage.dart';
+import 'package:Stockbot/widgets/iconWidget.dart';
+import 'package:Stockbot/widgets/sectionHeader.dart';
 
 class AccountSummary extends StatelessWidget {
   final AccountDetails details;
@@ -28,13 +27,15 @@ class AccountSummary extends StatelessWidget {
                   IconWidget(
                     icon: Icons.account_balance,
                     color: Theme.of(context).accentColor,
+                    // iconColor: Theme.of(context).primaryColor,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         Format.currency.format(details.totalEquity),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Total Equity",
@@ -44,7 +45,10 @@ class AccountSummary extends StatelessWidget {
                   ),
                 ],
               ),
-              GrowthPercentage(percent: details.growthPercentage, fontSize: 16, fontWeight: FontWeight.bold)
+              GrowthPercentage(
+                  percent: details.growthPercentage,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold)
             ],
           ),
         ),

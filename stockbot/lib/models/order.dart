@@ -9,7 +9,14 @@ class Order {
   int quantity;
   double averagePrice;
 
-  Order({this.id, this.submittedAt, this.side, this.status, this.symbol, this.quantity, this.averagePrice});
+  Order(
+      {this.id,
+      this.submittedAt,
+      this.side,
+      this.status,
+      this.symbol,
+      this.quantity,
+      this.averagePrice});
 
   double get price => quantity * averagePrice;
 
@@ -17,13 +24,12 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      id: json['id'],
-      submittedAt: DateTime.parse(json['submitted_at']),
-      side: json['side'].toString().toUpperCase(),
-      status: json['status'],
-      symbol: json['symbol'],
-      quantity: int.parse(json['qty']),
-      averagePrice: double.parse(json['filled_avg_price'])
-    );
+        id: json['id'],
+        submittedAt: DateTime.parse(json['submitted_at']),
+        side: json['side'].toString().toUpperCase(),
+        status: json['status'],
+        symbol: json['symbol'],
+        quantity: int.parse(json['qty']),
+        averagePrice: double.parse(json['filled_avg_price']));
   }
 }

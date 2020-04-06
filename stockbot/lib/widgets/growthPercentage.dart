@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:stockbot/utils/format.dart';
+import 'package:Stockbot/utils/format.dart';
 
 class GrowthPercentage extends StatelessWidget {
   final double percent;
   final double fontSize;
-  FontWeight fontWeight = FontWeight.normal;
+  final FontWeight fontWeight;
 
-  GrowthPercentage({this.percent, this.fontSize, this.fontWeight});
+  GrowthPercentage(
+      {this.percent, this.fontSize, this.fontWeight = FontWeight.normal});
 
   Color getTextColor(BuildContext context) {
     if (percent < 0) {
       return Theme.of(context).errorColor;
-    } 
-    return Theme.of(context).accentColor;
+    }
+    return Theme.of(context).primaryColor;
   }
 
   @override
@@ -20,10 +21,9 @@ class GrowthPercentage extends StatelessWidget {
     return Text(
       Format.growthPercentage.format(this.percent),
       style: TextStyle(
-        color: getTextColor(context),
-        fontSize: this.fontSize,
-        fontWeight: this.fontWeight
-      ),
+          color: getTextColor(context),
+          fontSize: this.fontSize,
+          fontWeight: this.fontWeight),
     );
   }
 }

@@ -1,9 +1,8 @@
-
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:stockbot/models/order.dart';
-import 'package:stockbot/models/positionDetails.dart';
+import 'package:Stockbot/models/order.dart';
+import 'package:Stockbot/models/positionDetails.dart';
 
 class AccountDetails extends ChangeNotifier {
   double _cashBalance;
@@ -19,13 +18,14 @@ class AccountDetails extends ChangeNotifier {
     if (_stock != null) {
       this._stock.addListener(this.notifyListeners);
     }
-    
+
     if (_bond != null) {
       this._bond.addListener(this.notifyListeners);
     }
-  } 
+  }
 
-  double get growthPercentage => (totalEquity - totalBasis - cashBalance) / (totalBasis + cashBalance);
+  double get growthPercentage =>
+      (totalEquity - totalBasis - cashBalance) / (totalBasis + cashBalance);
 
   set cashBalance(double balance) {
     _cashBalance = balance;
@@ -34,7 +34,10 @@ class AccountDetails extends ChangeNotifier {
 
   double get cashBalance => _cashBalance;
 
-  double get totalEquity => this._cashBalance + this._stock.currentPrice * this._stock.quantity + this._bond.currentPrice * this._bond.quantity;
+  double get totalEquity =>
+      this._cashBalance +
+      this._stock.currentPrice * this._stock.quantity +
+      this._bond.currentPrice * this._bond.quantity;
 
   double get totalBasis => this._stock.costBasis + this._bond.costBasis;
 
@@ -51,9 +54,7 @@ class AccountDetails extends ChangeNotifier {
   }
 
   factory AccountDetails.fromJson(Map<String, dynamic> json) {
-    return AccountDetails(
-      cashBalance: double.parse(json['cash'])
-    );
+    return AccountDetails(cashBalance: double.parse(json['cash']));
   }
 
   void notify() {

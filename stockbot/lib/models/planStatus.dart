@@ -2,8 +2,8 @@ import 'dart:math';
 
 import "dart:developer" as dev;
 import 'package:flutter/material.dart';
-import 'package:stockbot/models/account.dart';
-import 'package:stockbot/models/positionDetails.dart';
+import 'package:Stockbot/models/account.dart';
+import 'package:Stockbot/models/positionDetails.dart';
 
 class PlanStatus extends ChangeNotifier {
   StockPosition _stockPosition;
@@ -80,7 +80,10 @@ class PlanStatus extends ChangeNotifier {
       // We are buying, make sure we have enough bond / cash to cover it
       var amount = numShares * stockPosition.currentPrice;
       if (amount > (bondPosition.marketValue + accountDetails.cashBalance)) {
-        return ((bondPosition.marketValue + accountDetails.cashBalance) / stockPosition.currentPrice).floor().toInt();
+        return ((bondPosition.marketValue + accountDetails.cashBalance) /
+                stockPosition.currentPrice)
+            .floor()
+            .toInt();
       }
     }
 

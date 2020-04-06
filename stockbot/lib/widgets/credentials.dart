@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:stockbot/locator.dart';
-import 'package:stockbot/services/stockbotService.dart';
-import 'package:stockbot/services/storageService.dart';
+import 'package:Stockbot/locator.dart';
+import 'package:Stockbot/services/stockbotService.dart';
+import 'package:Stockbot/services/storageService.dart';
 
 class Credentials extends StatelessWidget {
   final StockbotService stockbot = locator.get<StockbotService>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(

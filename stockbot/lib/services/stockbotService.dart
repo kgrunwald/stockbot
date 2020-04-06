@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:stockbot/api/alpaca.dart';
-import 'package:stockbot/locator.dart';
-import 'package:stockbot/models/account.dart';
-import 'package:stockbot/models/bars.dart';
-import 'package:stockbot/models/order.dart';
-import 'package:stockbot/models/planStatus.dart';
-import 'package:stockbot/models/portfolioHistory.dart';
-import 'package:stockbot/models/positionDetails.dart';
-import 'package:stockbot/services/storageService.dart';
+import 'package:Stockbot/api/alpaca.dart';
+import 'package:Stockbot/locator.dart';
+import 'package:Stockbot/models/account.dart';
+import 'package:Stockbot/models/bars.dart';
+import 'package:Stockbot/models/order.dart';
+import 'package:Stockbot/models/planStatus.dart';
+import 'package:Stockbot/models/portfolioHistory.dart';
+import 'package:Stockbot/models/positionDetails.dart';
+import 'package:Stockbot/services/storageService.dart';
 import 'package:web_socket_channel/io.dart';
 
 class StockbotService {
@@ -22,7 +22,7 @@ class StockbotService {
   IOWebSocketChannel channel;
   Bars bars;
   AlpacaApi api;
-  
+
   final StorageService storage = locator.get<StorageService>();
   String _apiKey = "";
   String _apiSecretKey = "";
@@ -69,7 +69,7 @@ class StockbotService {
       api.fetchOrders(),
       api.fetchPortfolioHistory()
     ]);
-    
+
     AccountDetails details = futures[0];
     this.accountDetails.cashBalance = details.cashBalance;
 
@@ -83,7 +83,8 @@ class StockbotService {
     this.stockPosition.unrealizedPL = stock.unrealizedPL;
     this.stockPosition.unrealizedPLPercent = stock.unrealizedPLPercent;
     this.stockPosition.unrealizedIntradayPL = stock.unrealizedIntradayPL;
-    this.stockPosition.unrealizedIntradayPLPercent = stock.unrealizedIntradayPLPercent;
+    this.stockPosition.unrealizedIntradayPLPercent =
+        stock.unrealizedIntradayPLPercent;
 
     BondPosition bond = futures[2];
     this.bondPosition.symbol = bond.symbol;
@@ -95,7 +96,8 @@ class StockbotService {
     this.bondPosition.unrealizedPL = bond.unrealizedPL;
     this.bondPosition.unrealizedPLPercent = bond.unrealizedPLPercent;
     this.bondPosition.unrealizedIntradayPL = bond.unrealizedIntradayPL;
-    this.bondPosition.unrealizedIntradayPLPercent = bond.unrealizedIntradayPLPercent;
+    this.bondPosition.unrealizedIntradayPLPercent =
+        bond.unrealizedIntradayPLPercent;
 
     Bars tqqBars = futures[3];
     this.bars.bars = tqqBars.bars;
@@ -106,7 +108,7 @@ class StockbotService {
       if (bar.time.toUtc().weekday == DateTime.friday) {
         if (tqqWeekClose == 0 && tqqLastClose == 0) {
           tqqWeekClose = bar.close;
-        } else if (tqqLastClose == 0){
+        } else if (tqqLastClose == 0) {
           tqqLastClose = bar.close;
         } else {
           tqqWeekClose = tqqLastClose;
@@ -116,8 +118,9 @@ class StockbotService {
     }
     var tqqDiff = tqqLastClose - tqqWeekClose;
     this.stockPosition.lastWeekPLPercent = (tqqDiff) / tqqWeekClose;
-    this.stockPosition.currentPrice = tqqBars.bars[tqqBars.bars.length - 1].close;
-    
+    this.stockPosition.currentPrice =
+        tqqBars.bars[tqqBars.bars.length - 1].close;
+
     Bars aggBars = futures[4];
     double aggWeekClose = 0;
     double aggLastClose = 0;
@@ -132,7 +135,8 @@ class StockbotService {
     }
     var aggDiff = aggLastClose - aggWeekClose;
     this.bondPosition.lastWeekPLPercent = (aggDiff) / aggWeekClose;
-    this.bondPosition.currentPrice = aggBars.bars[aggBars.bars.length - 1].close;
+    this.bondPosition.currentPrice =
+        aggBars.bars[aggBars.bars.length - 1].close;
 
     this.status.target = 20000 * 1.09;
     this.status.is30Down = false;
@@ -148,11 +152,10 @@ class StockbotService {
     this.history.profitLossPercent = history.profitLossPercent;
     this.history.timestamp = history.timestamp;
 
-
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      this.stockPosition.currentPrice = this.stockPosition.currentPrice + 0.10;
-      this.stockPosition.marketValue = this.stockPosition.quantity * this.stockPosition.currentPrice;
-    });
+    // Timer.periodic(Duration(seconds: 1), (timer) {
+    //   this.stockPosition.currentPrice = this.stockPosition.currentPrice + 0.10;
+    //   this.stockPosition.marketValue = this.stockPosition.quantity * this.stockPosition.currentPrice;
+    // });
 
     status.notify();
     details.notify();
@@ -161,7 +164,8 @@ class StockbotService {
   }
 
   void initWebsocket() async {
-    channel = IOWebSocketChannel.connect('wss://alpaca.socket.polygon.io/stocks');
+    channel =
+        IOWebSocketChannel.connect('wss://alpaca.socket.polygon.io/stocks');
     channel.stream.listen((message) {
       var data = json.decode(message);
       if (data[0]['status'] == "auth_success") {
@@ -171,11 +175,12 @@ class StockbotService {
       } else if (data[0]['status'] == "connected") {
         log("Websocket connected");
         channel.sink.add('{"action":"auth","params":"AKYGMS27W5ON3I3046HV"}');
-      } else if (data[0]['message'] == "subscribed to: Q.TQQQ" || data[0]['message'] == "subscribed to: Q.AGG") {
-          log("Websocket subscribed");
+      } else if (data[0]['message'] == "subscribed to: Q.TQQQ" ||
+          data[0]['message'] == "subscribed to: Q.AGG") {
+        log("Websocket subscribed");
       } else {
         log("Got Quote: $message");
-        for(var msg in data) {
+        for (var msg in data) {
           this.setStockPrice(msg['sym'], msg['bp']);
         }
       }

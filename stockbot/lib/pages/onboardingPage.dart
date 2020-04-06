@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stockbot/locator.dart';
-import 'package:stockbot/pages/settingsPage.dart';
-import 'package:stockbot/services/stockbotService.dart';
+import 'package:Stockbot/locator.dart';
+import 'package:Stockbot/pages/settingsPage.dart';
+import 'package:Stockbot/services/stockbotService.dart';
 
 class OnboardingPage extends StatelessWidget {
   final StockbotService _service = locator.get<StockbotService>();
@@ -20,24 +20,22 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 72.0, left: 16, right: 16),
-        child: FutureBuilder<bool>(
-          future: _checkReady(context),
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              if (snapshot.data) {
-                // navigate to homepage
-              } else {
-                return renderSettings(context);
-              }
-            }
-            return Center(child: CircularProgressIndicator());
-          },
-        )
-      )
-    );
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        body: Padding(
+            padding: const EdgeInsets.only(top: 72.0, left: 16, right: 16),
+            child: FutureBuilder<bool>(
+              future: _checkReady(context),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data) {
+                    // navigate to homepage
+                  } else {
+                    return renderSettings(context);
+                  }
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            )));
   }
 
   Widget renderSettings(BuildContext context) {
@@ -64,13 +62,12 @@ class OnboardingPage extends StatelessWidget {
           child: SettingsPage(),
         ),
         FlatButton(
-          child: Text("Submit"),
-          color: Theme.of(context).accentColor,
-          onPressed: () async {
-            log("Submit presset");
-            _checkReady(context);
-          }
-        )
+            child: Text("Submit"),
+            color: Theme.of(context).accentColor,
+            onPressed: () async {
+              log("Submit presset");
+              _checkReady(context);
+            })
       ],
     );
   }
