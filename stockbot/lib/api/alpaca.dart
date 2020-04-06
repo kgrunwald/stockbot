@@ -9,8 +9,6 @@ import 'package:stockbot/models/portfolioHistory.dart';
 import 'package:stockbot/models/positionDetails.dart';
 
 class AlpacaApi {
-  // String _apiKey = "PKQ0KB6478IMOFI4O09X";
-  // String _secretKey = "scdViuotEK3sZEDA8zwq7DCGA/7K7pNsIcQSV3Oe";
   String _apiKey = "";
   String _secretKey = "";
   
