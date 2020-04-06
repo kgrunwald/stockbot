@@ -8,7 +8,9 @@ import 'package:stockbot/models/account.dart';
 import 'package:stockbot/models/bars.dart';
 import 'package:stockbot/models/order.dart';
 import 'package:stockbot/models/planStatus.dart';
+import 'package:stockbot/models/portfolioHistory.dart';
 import 'package:stockbot/models/positionDetails.dart';
+import 'package:stockbot/services/storageService.dart';
 import 'package:web_socket_channel/io.dart';
 
 class StockbotService {
@@ -16,24 +18,56 @@ class StockbotService {
   StockPosition stockPosition;
   BondPosition bondPosition;
   PlanStatus status;
+  PortfolioHistory history;
   IOWebSocketChannel channel;
+  Bars bars;
+  AlpacaApi api;
+  
+  final StorageService storage = locator.get<StorageService>();
+  String _apiKey = "";
+  String _apiSecretKey = "";
+  static const _StorageKeyAlpacaApiKey = "ALPACA_API_KEY";
+  static const _StorageKeyAlpacaApiSecretKey = "ALPACA_API_SECRET_KEY";
 
   StockbotService() {
     accountDetails = locator.get<AccountDetails>();
     stockPosition = locator.get<StockPosition>();
     bondPosition = locator.get<BondPosition>();
     status = locator.get<PlanStatus>();
+    history = locator.get<PortfolioHistory>();
+    api = locator.get<AlpacaApi>();
+    bars = locator.get<Bars>();
   }
 
+  Future<void> setCredentials() async {
+    _apiKey = await storage.read(_StorageKeyAlpacaApiKey);
+    _apiSecretKey = await storage.read(_StorageKeyAlpacaApiSecretKey);
+    api.setCredentials(_apiKey, _apiSecretKey);
+  }
+
+  Future<void> setApiKey(String key) async {
+    await storage.write(_StorageKeyAlpacaApiKey, key);
+    setCredentials();
+  }
+
+  Future<void> setApiSecretKey(String key) async {
+    await storage.write(_StorageKeyAlpacaApiSecretKey, key);
+    setCredentials();
+  }
+
+  String get apiKey => _apiKey;
+  String get apiSecretKey => _apiSecretKey;
+
   Future<void> start() async {
-    var api = AlpacaApi();
+    await setCredentials();
     var futures = await Future.wait([
       api.fetchAccountDetails(),
       api.fetchStockPositionDetails("TQQQ"),
       api.fetchBondPositionDetails("AGG"),
-      api.fetchBars("TQQQ", limit: 10),
+      api.fetchBars("TQQQ", limit: 14),
       api.fetchBars("AGG", limit: 10),
-      api.fetchOrders()
+      api.fetchOrders(),
+      api.fetchPortfolioHistory()
     ]);
     
     AccountDetails details = futures[0];
@@ -64,13 +98,18 @@ class StockbotService {
     this.bondPosition.unrealizedIntradayPLPercent = bond.unrealizedIntradayPLPercent;
 
     Bars tqqBars = futures[3];
+    this.bars.bars = tqqBars.bars;
+
     double tqqWeekClose = 0;
     double tqqLastClose = 0;
     for (var bar in tqqBars.bars) {
       if (bar.time.toUtc().weekday == DateTime.friday) {
-        if (tqqWeekClose == 0) {
+        if (tqqWeekClose == 0 && tqqLastClose == 0) {
           tqqWeekClose = bar.close;
+        } else if (tqqLastClose == 0){
+          tqqLastClose = bar.close;
         } else {
+          tqqWeekClose = tqqLastClose;
           tqqLastClose = bar.close;
         }
       }
@@ -101,6 +140,14 @@ class StockbotService {
     List<Order> orders = futures[5];
     log('Got orders ${orders.length}');
     this.accountDetails.setOrders(orders);
+
+    PortfolioHistory history = futures[6];
+    this.history.baseValue = history.baseValue;
+    this.history.equity = history.equity;
+    this.history.profitLoss = history.profitLoss;
+    this.history.profitLossPercent = history.profitLossPercent;
+    this.history.timestamp = history.timestamp;
+
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       this.stockPosition.currentPrice = this.stockPosition.currentPrice + 0.10;

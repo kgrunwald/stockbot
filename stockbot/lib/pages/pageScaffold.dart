@@ -2,10 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stockbot/api/alpaca.dart';
+import 'package:stockbot/locator.dart';
 import 'package:stockbot/pages/accountDetails.dart';
 import 'package:stockbot/pages/home.dart';
 import 'package:stockbot/pages/settingsPage.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:stockbot/services/stockbotService.dart';
 
 class PageScaffold extends StatefulWidget {
   PageScaffold({Key key}) : super(key: key);
@@ -18,7 +21,7 @@ class _PageScaffoldState extends State<PageScaffold> with TickerProviderStateMix
   final Widget body;
   int _currentIndex = 0;
   bool authenticated = false;
-
+  
   _PageScaffoldState({this.body});
 
   Future<bool> authenticateUser() async {
@@ -70,7 +73,7 @@ class _PageScaffoldState extends State<PageScaffold> with TickerProviderStateMix
           index: _currentIndex,
           children: <Widget>[
             HomePage(title: 'Stockbot'),
-            AccountDetailsPage(title: 'Account Details'),
+            AccountDetailsPage(),
             SettingsPage(),
           ],
         )

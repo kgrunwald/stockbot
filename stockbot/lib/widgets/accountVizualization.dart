@@ -45,6 +45,9 @@ class AccountVizualization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (details == null || history == null) {
+      return Container();
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 24.0),
       child: Container(

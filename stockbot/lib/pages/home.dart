@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stockbot/api/alpaca.dart';
+import 'package:stockbot/locator.dart';
 import 'package:stockbot/models/account.dart';
 import 'package:stockbot/models/bars.dart';
 import 'package:stockbot/models/planStatus.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Bars> _loadBars() async {
-    var api = AlpacaApi();
+    var api = locator.get<AlpacaApi>();
     return await api.fetchBars("TQQQ");
   }
 

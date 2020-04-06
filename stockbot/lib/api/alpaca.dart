@@ -9,7 +9,16 @@ import 'package:stockbot/models/portfolioHistory.dart';
 import 'package:stockbot/models/positionDetails.dart';
 
 class AlpacaApi {
+  // String _apiKey = "PKQ0KB6478IMOFI4O09X";
+  // String _secretKey = "scdViuotEK3sZEDA8zwq7DCGA/7K7pNsIcQSV3Oe";
+  String _apiKey = "";
+  String _secretKey = "";
   
+  void setCredentials(String key, String secret) {
+    _apiKey = key;
+    _secretKey = secret;
+  }
+
   Future<AccountDetails> fetchAccountDetails() async {
     var response = await _makeRequest("/v2/account");
     return AccountDetails.fromJson(json.decode(response.body));
@@ -73,15 +82,15 @@ class AlpacaApi {
 
   Future<http.Response> _makeRequest(String url) {
     return http.get("https://paper-api.alpaca.markets$url", headers: {
-      "APCA-API-KEY-ID": "PKQ0KB6478IMOFI4O09X",
-      "APCA-API-SECRET-KEY": "scdViuotEK3sZEDA8zwq7DCGA/7K7pNsIcQSV3Oe"
+      "APCA-API-KEY-ID": _apiKey,
+      "APCA-API-SECRET-KEY": _secretKey
     });
   }
 
   Future<http.Response> _makeDataRequest(String url) {
     return http.get("https://data.alpaca.markets$url", headers: {
-      "APCA-API-KEY-ID": "PKQ0KB6478IMOFI4O09X",
-      "APCA-API-SECRET-KEY": "scdViuotEK3sZEDA8zwq7DCGA/7K7pNsIcQSV3Oe"
+      "APCA-API-KEY-ID": _apiKey,
+      "APCA-API-SECRET-KEY": _secretKey
     });
   }
 }

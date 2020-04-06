@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:stockbot/models/bars.dart';
 import 'package:stockbot/models/planStatus.dart';
+import 'package:stockbot/models/portfolioHistory.dart';
+import 'package:stockbot/pages/onboardingPage.dart';
 import 'package:stockbot/pages/pageScaffold.dart';
 import 'package:stockbot/models/account.dart';
-import 'package:stockbot/services/stockbotService.dart';
 
 import 'package:stockbot/locator.dart';
 import 'models/positionDetails.dart';
 
 void main() async {
   setupLocator();
-  var svc = StockbotService();
-  await svc.start();
+  WidgetsFlutterBinding.ensureInitialized();
   return runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: locator.get<AccountDetails>()),
       ChangeNotifierProvider.value(value: locator.get<PlanStatus>()),
       ChangeNotifierProvider.value(value: locator.get<StockPosition>()),
       ChangeNotifierProvider.value(value: locator.get<BondPosition>()),
+      ChangeNotifierProvider.value(value: locator.get<PortfolioHistory>()),
+      ChangeNotifierProvider.value(value: locator.get<Bars>()),
     ],
     child: Stockbot()
   ));
@@ -41,7 +44,11 @@ class Stockbot extends StatelessWidget {
           bodyColor: Colors.white
         ),
       ),
-      home: PageScaffold(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => OnboardingPage(),
+        '/app': (context) => PageScaffold(),
+      },
     );
   }
 }

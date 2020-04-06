@@ -1,3 +1,7 @@
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
+
 class Bar {
   final DateTime time;
   final double open;
@@ -20,10 +24,23 @@ class Bar {
   }
 }
 
-class Bars {
-  final List<Bar> bars;
+class Bars extends ChangeNotifier {
+  final List<Bar> _bars = [];
 
-  Bars({this.bars});
+  Bars({List<Bar> bars}) {
+    this.bars = bars;
+  }
+
+  set bars(List<Bar> b) {
+    _bars.clear();
+    if (b != null) {
+      _bars.addAll(b);
+    }
+
+    notifyListeners();
+  }
+
+  UnmodifiableListView<Bar> get bars => UnmodifiableListView(_bars);
 
   factory Bars.fromJson(String symbol, Map<String, dynamic> json) {
     var symbolBars = json[symbol];
