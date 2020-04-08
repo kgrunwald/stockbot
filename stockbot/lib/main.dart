@@ -1,3 +1,6 @@
+import 'package:Stockbot/lifecycleHandler.dart';
+import 'package:Stockbot/services/navigatorService.dart';
+import 'package:Stockbot/services/stockbotService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +18,9 @@ import 'models/positionDetails.dart';
 void main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
+  var service = locator.get<StockbotService>();
+  var navigator = locator.get<NavigationService>();
+  WidgetsBinding.instance.addObserver(LifecycleHandler(service, navigator));
   return runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: locator.get<AccountDetails>()),
     ChangeNotifierProvider.value(value: locator.get<PlanStatus>()),
@@ -36,9 +42,10 @@ class Stockbot extends StatelessWidget {
         errorColor: StockbotColors.Error,
         accentColor: StockbotColors.Secondary,
         canvasColor: Color.fromRGBO(39, 39, 47, 1),
-        bottomAppBarColor: Color.fromRGBO(20, 20, 22, 1),
+        bottomAppBarColor: Color.fromRGBO(25, 25, 27, 1),
         textTheme: GoogleFonts.robotoTextTheme().apply(bodyColor: Colors.white),
       ),
+      navigatorKey: locator.get<NavigationService>().navigatorKey,
       initialRoute: '/',
       routes: {
         '/': (context) => OnboardingPage(),

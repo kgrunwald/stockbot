@@ -49,10 +49,11 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData) {
               return Consumer<PlanStatus>(
                   builder: (_, status, __) => Vizualization(
-                      bars: snapshot.data,
-                      quantity: status.stockPosition.quantity,
-                      startBalance: 20000,
-                      targetBalance: status.target));
+                    status: status,
+                    bars: snapshot.data,
+                    startBalance: 20000,
+                )
+              );
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             }

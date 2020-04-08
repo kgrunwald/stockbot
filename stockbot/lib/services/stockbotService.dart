@@ -21,6 +21,7 @@ class StockbotService {
   IOWebSocketChannel channel;
   Bars bars;
   AlpacaApi api;
+  Timer _timer;
 
   final StorageService storage = locator.get<StorageService>();
   String _apiKey = "";
@@ -125,7 +126,6 @@ class StockbotService {
     this.status.is30Down = false;
 
     List<Order> orders = futures[5];
-    log('Got orders ${orders.length}');
     this.accountDetails.setOrders(orders);
 
     PortfolioHistory history = futures[6];
@@ -146,7 +146,11 @@ class StockbotService {
   }
 
   void startPolling() {
-    Timer.periodic(Duration(seconds: 3), this.pollPositions);
+    _timer = Timer.periodic(Duration(seconds: 3), this.pollPositions);
+  }
+
+  void stopPolling() {
+    _timer.cancel();
   }
 
   void pollPositions(Timer _) async {

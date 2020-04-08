@@ -88,7 +88,6 @@ class AlpacaApi {
     }
 
     List<Order> orders = [];
-    log(response.body);
     for (var map in json.decode(response.body)) {
       if (map['status'] == 'new' || map['status'] == 'filled') {
         orders.add(Order.fromJson(map));
