@@ -1,9 +1,8 @@
 import 'dart:developer';
 
+import 'package:Stockbot/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Stockbot/api/alpaca.dart';
-import 'package:Stockbot/locator.dart';
 import 'package:Stockbot/pages/accountDetails.dart';
 import 'package:Stockbot/pages/home.dart';
 import 'package:Stockbot/pages/settingsPage.dart';
@@ -17,12 +16,22 @@ class PageScaffold extends StatefulWidget {
   _PageScaffoldState createState() => _PageScaffoldState();
 }
 
-class _PageScaffoldState extends State<PageScaffold> with TickerProviderStateMixin<PageScaffold> {
+class _PageScaffoldState extends State<PageScaffold> with TickerProviderStateMixin<PageScaffold>, WidgetsBindingObserver {
   final Widget body;
   int _currentIndex = 0;
   bool authenticated = false;
 
   _PageScaffoldState({this.body});
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var service = locator.get<StockbotService>();
+    if (state == AppLifecycleState.resumed) {
+      service.startPolling();
+    } else {
+      service.stopPolling();
+    }
+  }
 
   Future<bool> authenticateUser() async {
     try {

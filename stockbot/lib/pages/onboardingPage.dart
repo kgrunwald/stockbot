@@ -65,7 +65,6 @@ class OnboardingPage extends StatelessWidget {
             child: Text("Submit"),
             color: Theme.of(context).accentColor,
             onPressed: () async {
-              log("Submit presset");
               _checkReady(context);
             })
       ],

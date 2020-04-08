@@ -18,10 +18,7 @@ class PlanStatus extends ChangeNotifier {
     _bondPosition = bond;
 
     _accountDetails.addListener(this.notifyListeners);
-    _stockPosition.addListener(() {
-      dev.log("Plan got stock update: ${_stockPosition.marketValue}");
-      this.notifyListeners();
-    });
+    _stockPosition.addListener(this.notifyListeners);
     _bondPosition.addListener(this.notifyListeners);
   }
 

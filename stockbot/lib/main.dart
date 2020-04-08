@@ -36,7 +36,7 @@ class Stockbot extends StatelessWidget {
         errorColor: StockbotColors.Error,
         accentColor: StockbotColors.Secondary,
         canvasColor: Color.fromRGBO(39, 39, 47, 1),
-        bottomAppBarColor: Color.fromRGBO(20, 20, 22, 1),
+        bottomAppBarColor: Color.fromRGBO(25, 25, 27, 1),
         textTheme: GoogleFonts.robotoTextTheme().apply(bodyColor: Colors.white),
       ),
       initialRoute: '/',

@@ -1,3 +1,5 @@
+import 'package:Stockbot/models/account.dart';
+import 'package:Stockbot/models/planStatus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Stockbot/models/bars.dart';
@@ -13,16 +15,23 @@ class BalancePoint {
 
 class Vizualization extends StatelessWidget {
   Bars bars;
+  PlanStatus status;
   int quantity;
   final double startBalance;
-  final double targetBalance;
 
-  Vizualization({this.bars, this.quantity, this.startBalance, this.targetBalance});
+  Vizualization({this.bars, this.status, this.startBalance});
 
   List<charts.Series<BalancePoint, DateTime>> data() {
     var data = List<BalancePoint>();
+    var orders = status.accountDetails.orders;
     for (var bar in this.bars.bars) {
-      data.add(BalancePoint(bar.time, bar.close * this.quantity));
+      int quantity = 0;
+      for (var order in orders) {
+        if (order.submittedAt.isBefore(bar.time)) {
+          quantity += order.quantity;
+        }
+      }
+      data.add(BalancePoint(bar.time, bar.close * quantity));
     }
 
     return [
@@ -57,7 +66,7 @@ class Vizualization extends StatelessWidget {
                 primaryMeasureAxis: charts.NumericAxisSpec(
                     tickFormatterSpec: simpleCurrencyFormatter,
                     tickProviderSpec: charts.StaticNumericTickProviderSpec(
-                        [charts.TickSpec(this.startBalance), charts.TickSpec(this.targetBalance)]),
+                        [charts.TickSpec(this.startBalance), charts.TickSpec(status.target)]),
                     renderSpec: charts.GridlineRendererSpec(
                         labelStyle: charts.TextStyleSpec(color: charts.Color.white),
                         lineStyle: charts.LineStyleSpec(dashPattern: [1, 0, 1]))))),
