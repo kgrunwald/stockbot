@@ -41,7 +41,7 @@ class AlpacaApi {
       return [];
     }
 
-   List<Map<String, dynamic>> res =  json.decode(response.body);
+   List<dynamic> res =  json.decode(response.body);
    List<PositionDetails> retVal = [];
    for(var map in res) {
      var details = PositionDetails();

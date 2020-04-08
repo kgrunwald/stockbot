@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 
-import "dart:developer" as dev;
 import 'package:flutter/material.dart';
 import 'package:Stockbot/models/account.dart';
 import 'package:Stockbot/models/positionDetails.dart';
@@ -18,7 +18,10 @@ class PlanStatus extends ChangeNotifier {
     _bondPosition = bond;
 
     _accountDetails.addListener(this.notifyListeners);
-    _stockPosition.addListener(this.notifyListeners);
+    _stockPosition.addListener(() {
+      dev.log("Plan got stock update: ${_stockPosition.marketValue}");
+      this.notifyListeners();
+    });
     _bondPosition.addListener(this.notifyListeners);
   }
 

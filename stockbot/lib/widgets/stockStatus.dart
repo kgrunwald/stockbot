@@ -1,3 +1,4 @@
+import 'package:Stockbot/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:Stockbot/models/positionDetails.dart';
 import 'package:Stockbot/utils/format.dart';
@@ -14,7 +15,7 @@ class StockStatus extends StatelessWidget {
       children: <Widget>[
         IconWidget(
           icon: stock.lastWeekPLPercent >= 0 ? Icons.trending_up : Icons.trending_down,
-          color: stock.lastWeekPLPercent >= 0 ? Theme.of(context).accentColor : Theme.of(context).errorColor,
+          color: stock.lastWeekPLPercent >= 0 ? StockbotColors.Accent1 : Theme.of(context).errorColor,
         ),
         Row(
           children: <Widget>[

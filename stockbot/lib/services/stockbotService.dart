@@ -72,8 +72,8 @@ class StockbotService {
       api.fetchAccountDetails(),
       api.fetchStockPositionDetails("TQQQ"),
       api.fetchBondPositionDetails("AGG"),
-      api.fetchBars("TQQQ", limit: 14),
-      api.fetchBars("AGG", limit: 10),
+      api.fetchBars("TQQQ", limit: 5),
+      api.fetchBars("AGG", limit: 5),
       api.fetchOrders(),
       api.fetchPortfolioHistory()
     ]);
@@ -108,36 +108,15 @@ class StockbotService {
     Bars tqqBars = futures[3];
     this.bars.bars = tqqBars.bars;
 
-    double tqqWeekClose = 0;
-    double tqqLastClose = 0;
-    for (var bar in tqqBars.bars) {
-      if (bar.time.toUtc().weekday == DateTime.friday) {
-        if (tqqWeekClose == 0 && tqqLastClose == 0) {
-          tqqWeekClose = bar.close;
-        } else if (tqqLastClose == 0) {
-          tqqLastClose = bar.close;
-        } else {
-          tqqWeekClose = tqqLastClose;
-          tqqLastClose = bar.close;
-        }
-      }
-    }
+    double tqqWeekClose = tqqBars.bars[0].close;
+    double tqqLastClose = tqqBars.bars[tqqBars.bars.length - 1].close;
     var tqqDiff = tqqLastClose - tqqWeekClose;
     this.stockPosition.lastWeekPLPercent = (tqqDiff) / tqqWeekClose;
     this.stockPosition.currentPrice = tqqBars.bars[tqqBars.bars.length - 1].close;
 
     Bars aggBars = futures[4];
-    double aggWeekClose = 0;
-    double aggLastClose = 0;
-    for (var bar in aggBars.bars) {
-      if (bar.time.toUtc().weekday == DateTime.friday) {
-        if (aggWeekClose == 0) {
-          aggWeekClose = bar.close;
-        } else {
-          aggLastClose = bar.close;
-        }
-      }
-    }
+    double aggWeekClose = aggBars.bars[0].close;
+    double aggLastClose = aggBars.bars[tqqBars.bars.length - 1].close;
     var aggDiff = aggLastClose - aggWeekClose;
     this.bondPosition.lastWeekPLPercent = (aggDiff) / aggWeekClose;
     this.bondPosition.currentPrice = aggBars.bars[aggBars.bars.length - 1].close;
