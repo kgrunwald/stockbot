@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:Stockbot/services/navigatorService.dart';
 import 'package:flutter/material.dart';
 import 'package:Stockbot/locator.dart';
 import 'package:Stockbot/pages/settingsPage.dart';
@@ -7,10 +8,11 @@ import 'package:Stockbot/services/stockbotService.dart';
 
 class OnboardingPage extends StatelessWidget {
   final StockbotService _service = locator.get<StockbotService>();
+  final NavigationService _navigation = locator.get<NavigationService>();
   Future<bool> _checkReady(BuildContext context) async {
     try {
       await _service.start();
-      Navigator.pushReplacementNamed(context, '/app');
+      _navigation.navigateTo('/app');
       return true;
     } catch (Exception) {
       return false;
