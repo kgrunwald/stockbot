@@ -35,6 +35,23 @@ class AlpacaApi {
     return StockPosition.fromJson(symbol, json.decode(response.body));
   }
 
+  Future<List<PositionDetails>> fetchPositions() async {
+    var response = await _makeRequest("/v2/positions");
+    if (response.statusCode != 200) {
+      return [];
+    }
+
+   List<Map<String, dynamic>> res =  json.decode(response.body);
+   List<PositionDetails> retVal = [];
+   for(var map in res) {
+     var details = PositionDetails();
+     details.populateJson(map);
+     retVal.add(details);
+   }
+
+   return retVal;
+  }
+
   Future<BondPosition> fetchBondPositionDetails(String symbol) async {
     var response = await _makeRequest("/v2/positions/$symbol");
     if (response.statusCode != 200) {

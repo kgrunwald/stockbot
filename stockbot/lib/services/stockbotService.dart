@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:Stockbot/api/alpaca.dart';
@@ -164,39 +163,23 @@ class StockbotService {
 
     status.notify();
     details.notify();
-
-    initWebsocket();
+    startPolling();
   }
 
-  void initWebsocket() async {
-    channel = IOWebSocketChannel.connect('wss://alpaca.socket.polygon.io/stocks');
-    channel.stream.listen((message) {
-      var data = json.decode(message);
-      if (data[0]['status'] == "auth_success") {
-        log("Websocket authenticated");
-        channel.sink.add('{"action":"subscribe","params":"Q.TQQQ"}');
-        channel.sink.add('{"action":"subscribe","params":"Q.AGG"}');
-      } else if (data[0]['status'] == "connected") {
-        log("Websocket connected");
-        channel.sink.add('{"action":"auth","params":"AKYGMS27W5ON3I3046HV"}');
-      } else if (data[0]['message'] == "subscribed to: Q.TQQQ" || data[0]['message'] == "subscribed to: Q.AGG") {
-        log("Websocket subscribed");
-      } else {
-        log("Got Quote: $message");
-        for (var msg in data) {
-          this.setStockPrice(msg['sym'], msg['bp']);
-        }
+  void startPolling() {
+    Timer.periodic(Duration(seconds: 3), this.pollPositions);
+  }
+
+  void pollPositions(Timer _) async {
+    List<PositionDetails> positions = await api.fetchPositions();
+    for(var position in positions) {
+      if (position.symbol == "TQQQ") {
+        this.stockPosition.marketValue = position.marketValue;
+        this.stockPosition.currentPrice = position.currentPrice;
+      } else if (position.symbol == "AGG") {
+        this.bondPosition.marketValue = position.marketValue;
+        this.bondPosition.currentPrice = position.currentPrice;
       }
-    });
-  }
-
-  void setStockPrice(String symbol, double value) {
-    if (symbol == "TQQQ") {
-      this.stockPosition.currentPrice = value;
-    } else if (symbol == "AGG") {
-      this.bondPosition.currentPrice = value;
-    } else {
-      throw new Exception("Usupported stock symbol: $symbol");
     }
   }
 }
