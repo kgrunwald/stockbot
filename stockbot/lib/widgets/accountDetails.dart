@@ -1,3 +1,8 @@
+import 'dart:developer';
+
+import 'package:Stockbot/arguments/orderPageArguments.dart';
+import 'package:Stockbot/locator.dart';
+import 'package:Stockbot/services/navigatorService.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
@@ -28,6 +33,8 @@ class AccountDetails extends StatelessWidget {
   double stockPercentage;
   double bondPercentage;
   double cashPercentage;
+
+  final NavigationService navigationService = locator.get<NavigationService>();
 
   acctModel.AccountDetails acctDetails;
 
@@ -157,7 +164,9 @@ class AccountDetails extends StatelessWidget {
             },
             children: acctDetails.orders
                 .map((order) => DetailTable.stockOrderRow(
-                    order.symbol, order.side, order.formattedTime, order.quantity, order.price))
+                    order.symbol, order.side, order.formattedTime, 
+                    order.quantity, order.price, 
+                    callback: () => navigationService.push('/order', arguments: order)))
                 .toList())
       ],
     );

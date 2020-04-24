@@ -7,6 +7,7 @@ import 'package:Stockbot/models/bars.dart';
 import 'package:Stockbot/models/order.dart';
 import 'package:Stockbot/models/portfolioHistory.dart';
 import 'package:Stockbot/models/positionDetails.dart';
+import 'package:intl/intl.dart';
 
 class AlpacaApi {
   String _apiKey = "";
@@ -72,9 +73,27 @@ class AlpacaApi {
     return PortfolioHistory.fromJson(json.decode(response.body));
   }
 
-  Future<Bars> fetchBars(String symbol, {int limit = 14}) async {
-    var response = await _makeDataRequest("/v1/bars/1D?limit=$limit&symbols=$symbol");
+  Future<Bars> fetchBars(String symbol, {int limit, DateTime start, DateTime end}) async {
+    Map<String, String> query = {};
+    query['symbols'] = symbol;
+
+    if (limit != null) {
+      query["limit"] = "$limit";
+    }
+
+    if (start != null) {
+      query['start'] = start.toIso8601String();
+    }
+
+    if (end != null) {
+      query['end'] = end.toIso8601String();
+    }
+
+    var url = Uri(path: "/v1/bars/1D", queryParameters: query);
+    log(url.toString());
+    var response = await _makeDataRequest(url.toString());
     if (response.statusCode != 200) {
+      log(response.body);
       return null;
     }
 

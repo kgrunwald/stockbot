@@ -73,10 +73,11 @@ class StockbotService {
       api.fetchAccountDetails(),
       api.fetchStockPositionDetails("TQQQ"),
       api.fetchBondPositionDetails("AGG"),
-      api.fetchBars("TQQQ", limit: 5),
+      api.fetchBars("TQQQ", limit: 30),
       api.fetchBars("AGG", limit: 5),
       api.fetchOrders(),
-      api.fetchPortfolioHistory()
+      api.fetchPortfolioHistory(),
+      willSkipNextSell()
     ]);
 
     AccountDetails details = futures[0];
@@ -109,7 +110,7 @@ class StockbotService {
     Bars tqqBars = futures[3];
     this.bars.bars = tqqBars.bars;
 
-    double tqqWeekClose = tqqBars.bars[0].close;
+    double tqqWeekClose = tqqBars.bars[tqqBars.bars.length - 5].close;
     double tqqLastClose = tqqBars.bars[tqqBars.bars.length - 1].close;
     var tqqDiff = tqqLastClose - tqqWeekClose;
     this.stockPosition.lastWeekPLPercent = (tqqDiff) / tqqWeekClose;
@@ -117,7 +118,7 @@ class StockbotService {
 
     Bars aggBars = futures[4];
     double aggWeekClose = aggBars.bars[0].close;
-    double aggLastClose = aggBars.bars[tqqBars.bars.length - 1].close;
+    double aggLastClose = aggBars.bars[aggBars.bars.length - 1].close;
     var aggDiff = aggLastClose - aggWeekClose;
     this.bondPosition.lastWeekPLPercent = (aggDiff) / aggWeekClose;
     this.bondPosition.currentPrice = aggBars.bars[aggBars.bars.length - 1].close;
@@ -135,25 +136,172 @@ class StockbotService {
     this.history.profitLossPercent = history.profitLossPercent;
     this.history.timestamp = history.timestamp;
 
-    // Timer.periodic(Duration(seconds: 1), (timer) {
-    //   this.stockPosition.currentPrice = this.stockPosition.currentPrice + 0.10;
-    //   this.stockPosition.marketValue = this.stockPosition.quantity * this.stockPosition.currentPrice;
-    // });
+    this.status.is30Down = futures[7];
 
+    await pollPositions(null);
     status.notify();
     details.notify();
     startPolling();
   }
 
+  //  true  true  false        false        false
+  //  buy   buy    sell (skip)  sell (skip) sell
+
+  DateTime getPreviousActionDate(DateTime date) {
+    if(date.month >= 10) {
+      return DateTime(date.year, 10, 1);
+    }
+    
+    if(date.month >= 7) {
+      return DateTime(date.year, 7, 1);
+    }
+
+    if(date.month >= 4) {
+      return DateTime(date.year, 4, 1);
+    }
+
+    return DateTime(date.year, 1, 1);
+  }
+
+  DateTime getPreviousQuarter(DateTime date) {
+    if(date.month > 10) {
+      return DateTime(date.year, 10, 1);
+    }
+    
+    if(date.month > 7) {
+      return DateTime(date.year, 7, 1);
+    }
+
+    if(date.month > 4) {
+      return DateTime(date.year, 4, 1);
+    }
+
+    if(date.month > 1) {
+      return DateTime(date.year, 1, 1);
+    }
+
+    return DateTime(date.year - 1, 10, 1);
+  }
+
+  Future<bool> willSkipNextSell() async {
+    var now = DateTime.now();
+
+    // Get last 4 years of bars
+    var twoYearsAgo = DateTime(now.year - 2, now.month, now.day);
+    var fourYearsAgo = DateTime(now.year - 4, now.month, now.day);
+    var second = await this.api.fetchBars("TQQQ", start: twoYearsAgo, limit: 1000);
+    var first = await this.api.fetchBars("TQQQ", start: fourYearsAgo, end: twoYearsAgo, limit: 1000);
+
+    List<Bar> bars = [];
+    List<Bar> tmp = [...first.bars, ...second.bars];
+    for(var b in tmp) {
+      var exists = false;
+      for(var existing in bars) {
+        if (existing.time == b.time) {
+          exists = true;
+          break;
+        }
+      }
+
+      if(!exists) {
+        bars.add(b);
+        log("${b.time}");
+      }
+    }
+
+    log("${bars.length} ${bars[0].time} ${bars[bars.length - 1].time}");
+
+    List<DateTime> sells = [];
+    List<DateTime> downs = [];
+
+    DateTime init = getPreviousActionDate(now);
+    List<DateTime> quarters = [init];
+    // // Get last 2 years of quarters
+    for(int i = 0; i < 8; i++) {
+      quarters.add(getPreviousQuarter(quarters[quarters.length - 1]));
+    }
+
+    for(var date in quarters) {
+      if(this.getQuarterAction(date, bars) == 'sell') {
+        sells.add(date);
+      }
+
+      if(this.is30DownAtDate(date, bars)) {
+        downs.add(date);
+      }
+    }
+
+    // List<DateTime> sells = [];
+    // for(int i = 0; i < actions.length; i++) {
+    //   if (actions[i] == 'sell') {
+    //     sells.add(quarters[i]);
+    //   }
+    // }
+
+
+    log("$quarters");
+    log("$sells");
+    log("${downs.length}");
+    // For each down 30, count the # of sell signals that follow
+    // return # sells < # down 30
+    return true;
+  }
+
+  String getQuarterAction(DateTime quarter, List<Bar> allBars) {
+    var start = this.getPreviousQuarter(quarter);
+    var endBar = this.getFirstBarBefore(quarter, allBars);
+    var startBar = this.getFirstBarBefore(start, allBars);
+
+    var startClose = startBar.close;
+    var endClose = endBar.close;
+    log("Getting action $start ${startBar.close} $quarter ${endBar.close}");
+    if ((endClose / startClose) > 1.09) {
+      return 'sell';
+    }
+
+    return 'buy';
+  }
+
+  Bar getFirstBarBefore(DateTime date, List<Bar> allBars) {
+    for(int i = allBars.length - 1; i >= 0; i--) {
+      Bar bar = allBars[i];
+      if(bar.time.isBefore(date)) {
+        return bar;
+      }
+    }
+    return null;
+  }
+
+  bool is30DownAtDate(DateTime quarter, List<Bar> allBars) {
+    var start = DateTime(quarter.year - 2, quarter.month, quarter.day);
+    double lastClose = getFirstBarBefore(quarter, allBars).close;
+    double high = 0;
+    for(var b in allBars) {
+      if(b.time.isAfter(start) && b.time.isBefore(quarter)) {
+        if(b.close > high) {
+          high = b.close;
+          log("High: ${b.time} ${b.close}");
+        }
+      }
+    }
+
+    log("High between $start and $quarter is $high, close: $lastClose = ${high / lastClose}");
+    return lastClose < (high * .7);
+  }
+
   void startPolling() {
+    this.stopPolling();
     _timer = Timer.periodic(Duration(seconds: 3), this.pollPositions);
   }
 
   void stopPolling() {
-    _timer.cancel();
+    if(_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
   }
 
-  void pollPositions(Timer _) async {
+  Future<void> pollPositions(Timer _) async {
     List<PositionDetails> positions = await api.fetchPositions();
     for(var position in positions) {
       if (position.symbol == "TQQQ") {

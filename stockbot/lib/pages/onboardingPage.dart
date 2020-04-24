@@ -9,14 +9,15 @@ import 'package:Stockbot/services/stockbotService.dart';
 class OnboardingPage extends StatelessWidget {
   final StockbotService _service = locator.get<StockbotService>();
   final NavigationService _navigation = locator.get<NavigationService>();
+  
   Future<bool> _checkReady(BuildContext context) async {
-    try {
+    // try {
       await _service.start();
       _navigation.navigateTo('/app');
       return true;
-    } catch (Exception) {
-      return false;
-    }
+    // } catch (e) {
+      // return false;
+    // }
   }
 
   @override

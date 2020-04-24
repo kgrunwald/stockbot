@@ -1,4 +1,8 @@
 import 'package:Stockbot/lifecycleHandler.dart';
+import 'package:Stockbot/pages/appScaffold.dart';
+import 'package:Stockbot/pages/authenticatedPage.dart';
+import 'package:Stockbot/pages/orderDetailsPage.dart';
+import 'package:Stockbot/services/authService.dart';
 import 'package:Stockbot/services/navigatorService.dart';
 import 'package:Stockbot/services/stockbotService.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +12,6 @@ import 'package:Stockbot/models/bars.dart';
 import 'package:Stockbot/models/planStatus.dart';
 import 'package:Stockbot/models/portfolioHistory.dart';
 import 'package:Stockbot/pages/onboardingPage.dart';
-import 'package:Stockbot/pages/pageScaffold.dart';
 import 'package:Stockbot/models/account.dart';
 
 import 'package:Stockbot/locator.dart';
@@ -19,8 +22,9 @@ void main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   var service = locator.get<StockbotService>();
+  var auth = locator.get<AuthService>();
   var navigator = locator.get<NavigationService>();
-  WidgetsBinding.instance.addObserver(LifecycleHandler(service, navigator));
+  WidgetsBinding.instance.addObserver(LifecycleHandler(service, auth, navigator));
   return runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: locator.get<AccountDetails>()),
     ChangeNotifierProvider.value(value: locator.get<PlanStatus>()),
@@ -32,6 +36,8 @@ void main() async {
 }
 
 class Stockbot extends StatelessWidget {
+  final AuthService auth = locator.get<AuthService>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,8 +54,18 @@ class Stockbot extends StatelessWidget {
       navigatorKey: locator.get<NavigationService>().navigatorKey,
       initialRoute: '/',
       routes: {
-        '/': (context) => OnboardingPage(),
-        '/app': (context) => PageScaffold(),
+        '/': (context) => AuthenticatedPage(
+          auth: this.auth,
+          child: OnboardingPage()
+        ),
+        '/app': (context) => AuthenticatedPage(
+          auth: this.auth,
+          child: AppScaffold()
+        ),
+        '/order': (context) => AuthenticatedPage(
+          auth: this.auth,
+          child: OrderDetailsPage()
+        ),
       },
     );
   }

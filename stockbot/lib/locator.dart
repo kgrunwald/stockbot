@@ -1,3 +1,4 @@
+import 'package:Stockbot/services/authService.dart';
 import 'package:Stockbot/services/navigatorService.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Stockbot/api/alpaca.dart';
@@ -27,4 +28,5 @@ void setupLocator() {
   locator.registerSingleton<PlanStatus>(PlanStatus(details, stock, bond));
   locator.registerSingleton<StockbotService>(StockbotService());
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerSingleton<AuthService>(AuthService());
 }

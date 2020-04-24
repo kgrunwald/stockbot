@@ -21,17 +21,28 @@ class DetailTable extends StatelessWidget {
     ]);
   }
 
-  static TableRow stockOrderRow(String stock, String side, String date, int quantity, double price) {
-    return _orderRow(stock, StockbotColors.Accent1, side, date, quantity, price);
+  static TableRow stockOrderRow(String stock, String side, String date, int quantity, double price, { Function callback }) {
+    return _orderRow(stock, StockbotColors.Accent1, side, date, quantity, price, callback: callback);
   }
 
-  static TableRow bondOrderRow(String stock, String side, String date, int quantity, double price) {
-    return _orderRow(stock, StockbotColors.Accent4, side, date, quantity, price);
+  static TableRow bondOrderRow(String stock, String side, String date, int quantity, double price, { Function callback }) {
+    return _orderRow(stock, StockbotColors.Accent4, side, date, quantity, price, callback: callback);
   }
 
-  static TableRow _orderRow(String stock, Color color, String side, String date, int quantity, double price) {
+  static TableRow _orderRow(String stock, Color color, String side, String date, int quantity, double price, { Function callback }) {
     return TableRow(children: [
-      Padding(padding: _padding, child: Text(stock, style: TextStyle(fontWeight: FontWeight.bold, color: color))),
+      GestureDetector(
+        onTap: callback,
+        child: Padding(
+          padding: _padding,
+          child: Text(
+            stock, style: TextStyle(
+              fontWeight: FontWeight.bold, 
+              color: color
+            )
+          ),
+        )
+      ),
       Padding(
         padding: _padding,
         child: Text(date, style: TextStyle(fontSize: 12, color: Colors.grey.shade400)),
