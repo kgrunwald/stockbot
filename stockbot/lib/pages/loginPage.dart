@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    this.auth.authenticateUser();
+    Future.delayed(Duration(milliseconds: 70), this.auth.authenticateUser);
   }
 
   @override

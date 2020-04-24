@@ -23,9 +23,8 @@ import Flutter
 
     override func applicationDidBecomeActive(_ application: UIApplication) {
         if let imageView : UIImageView = UIApplication.shared.keyWindow?.subviews.last?.viewWithTag(101) as? UIImageView {
-            
             UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseInOut, animations: {
-                imageView.alpha = 0.0
+                imageView.alpha = 0.999
             }, completion: { (finished: Bool) in
                 imageView.removeFromSuperview()
             } )

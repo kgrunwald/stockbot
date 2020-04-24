@@ -17,7 +17,6 @@ class LifecycleHandler extends WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch(state) {
       case AppLifecycleState.resumed:
-        auth.authenticateUser();
         service.startPolling();
         log("resumed");
         break;
